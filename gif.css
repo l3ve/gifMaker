@@ -1,0 +1,68 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+img, video {
+    box-shadow: 0 0 15px black;
+}
+
+.btn {
+    display: inline-block;
+    border: 1px #6a71e5 solid;
+    width: 70px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 17px;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    color: #6a71e5;
+}
+
+#main {
+    width: 800px;
+    height: 515px;
+    overflow-y: scroll;
+}
+
+#video-gif {
+    margin: 0 auto;
+    width: 700px;
+}
+
+.del_btn, .sav_btn {
+    position:relative;
+    bottom: 80px;
+    margin: 0 20px;
+}
+
+#drag {
+    /*-webkit-app-region: drag;*/
+    -webkit-user-select: none;
+    width: 100%;
+    text-align: center;
+    background-color: #000;
+    position: fixed;
+    bottom: 0;
+}
+
+#per {
+    font-size: 23px;
+    margin: 10px auto;
+    color: #fff;
+}
+
+span.btn {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+}
