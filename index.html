@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ACGView</title>
+    <meta charset="utf-8">
+    <meta name="description" content="ACG图片分享">
+    <meta name="keywords" content="ACG,pictrue">
+    <meta name="author" content="L3ve,Jeccc">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link href="gif.css" rel="stylesheet">
+</head>
+<body>
+<section id="main">
+
+    <input id="file" type="file">
+    <div id="video-gif">
+        <img id="gif" >
+        <!--<a href="Chrysanthemum.jpg">sdfasdf</a>-->
+        <video id="video" controls width="320">
+            <source src="321.mp4">
+        </video>
+
+    </div>
+
+
+</section>
+<section id="drag">
+    <i class="btn" id="b_btn">start</i>
+    <span class="btn" id="close">X</span>
+
+    <p id="per">1</p>
+</section>
+</body>
+<script src="gif.js"></script>
+<script src="gif.worker.js"></script>
+<script src="index.js"></script>
+
+</html>
