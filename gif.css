@@ -9,28 +9,38 @@ html, body {
     overflow-x: hidden;
 }
 
-img, video {
+video {
     box-shadow: 0 0 15px black;
+    display: block;
+    margin: 30px auto;
+}
+img {
+    vertical-align: bottom;
 }
 
 .btn {
     display: inline-block;
-    border: 1px #6a71e5 solid;
-    width: 70px;
+    border: 1px #666 solid;
+    width: 100px;
     height: 30px;
     line-height: 30px;
     text-align: center;
-    font-size: 17px;
-    border-radius: 5px;
+    font-size: 14px;
+    border-radius: 3px;
     margin: 5px;
     cursor: pointer;
-    color: #6a71e5;
+    color: #000;
 }
 
 #main {
     width: 800px;
     height: 515px;
-    overflow-y: scroll;
+    margin: auto;
+    overflow-y: auto;
+}
+#setbtns {
+    width: 350px;
+    margin:10px auto;
 }
 
 #video-gif {
@@ -38,11 +48,14 @@ img, video {
     width: 700px;
 }
 
-.del_btn, .sav_btn {
-    position:relative;
-    bottom: 80px;
-    margin: 0 20px;
+.box {
+    display: inline-block;
+    background-color: #ff5534;
+    padding: 10px;
+    -webkit-user-select: none;
+    margin: 10px;
 }
+
 
 #drag {
     /*-webkit-app-region: drag;*/
