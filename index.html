@@ -14,22 +14,24 @@
 </head>
 <body>
 <section id="main">
-
-    <input id="file" type="file">
+    <div id="setbtns">
+    <input id="file" type="file" style="display: none" accept=".mp4">
+    <i id="file_btn" class="btn">选择视频文件</i>
+    <input id="gif_w" class="btn" placeholder="gif的长度">
+    <input id="gif_h" class="btn" placeholder="gif的宽度">
+    </div>
     <div id="video-gif">
-        <img id="gif" >
-        <!--<a href="Chrysanthemum.jpg">sdfasdf</a>-->
-        <video id="video" controls width="320">
+        <video id="zweiVideo" controls>
             <source src="321.mp4">
         </video>
 
     </div>
 
-
-</section>
-<section id="drag">
     <i class="btn" id="b_btn">start</i>
     <span class="btn" id="close">X</span>
+</section>
+<section id="drag">
+
 
     <p id="per">1</p>
 </section>
