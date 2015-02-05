@@ -23,35 +23,56 @@
             clearTimeout(id);
         };
     }
+
+
 }());
+function ele(elm) {
+    return document.querySelector(elm);
+}
 
 zweiGif = (function () {
 
-    var video = document.querySelector("#zweiVideo"),
+    var video = ele("#zweiVideo"),
         canvas = document.createElement("canvas"),
         i,
+        w = 100,
+        h = 100,
         status = "start",
         gif = new GIF({
             workers: 4,
             quality: 10,
             workerScript: 'gif.worker.js'
-        }),
-        w = 100,
-        h = 100;
+        });
+
 
     function Zweigif() {
+    }
+
+    function loop() {
+        canvas.getContext("2d").drawImage(video, 0, 0, w, h);
+        gif.addFrame(canvas, {copy: true, delay: 20});
+        i = requestAnimationFrame(loop);
+    }
+
+    function makeGif() {
+        if (status == "start") {
+            gif.abort();
+            gif.frames = [];
+            i = loop();
+            status = "end";
+            this.innerHTML = "end";
+        } else {
+            cancelAnimationFrame(i);
+            gif.render();
+            status = "start";
+            this.innerHTML = "start";
+        }
     }
 
     canvas.width = w;
     canvas.height = h;
 //视频转gif
-    Zweigif.prototype.getGif = function () {
-
-        function loop() {
-            canvas.getContext("2d").drawImage(video, 0, 0, w, h);
-            gif.addFrame(canvas, {copy: true, delay: 20});
-            i = requestAnimationFrame(loop);
-        }
+    Zweigif.prototype.makeGif = function () {
 
         gif.on('finished', function (blob) {
             var img = document.createElement("img"),
@@ -59,8 +80,9 @@ zweiGif = (function () {
             img.setAttribute("src", URL.createObjectURL(blob));
             div.setAttribute("class", "box");
             div.insertBefore(img);
-            document.querySelector("#video-gif").insertBefore(div);
+            ele("#video-gif").insertBefore(div);
 
+            //消除子元素继承父元素的事件
             img.addEventListener('click', function (e) {
                 e.stopPropagation();
             }, false);
@@ -70,28 +92,27 @@ zweiGif = (function () {
 
         });
         gif.on('progress', function (p) {
-            document.querySelector("#per").innerHTML = Math.round(p * 100) + "%";
+            ele("#per").innerHTML = Math.round(p * 100) + "%";
         });
-
-
-        document.querySelector("#b_btn").addEventListener('click', function () {
-            if (status == "start") {
-                gif.abort();
-                gif.frames = [];
-                i = loop();
-                status = "end";
-                this.innerHTML = "end";
-            } else {
-                cancelAnimationFrame(i);
-                gif.render();
-                status = "start";
-                this.innerHTML = "start";
-            }
-        }, false);
     };
+    ele("#b_btn").addEventListener('click', makeGif, false);
 
-    Zweigif.prototype.setGifwh = function () {
 
+    Zweigif.prototype.setGif = function (neww, newh) {
+        gif = null;
+        w = neww;
+        h = newh;
+        canvas.width = w;
+        canvas.height = h;
+        ele("#b_btn").removeEventListener('click', makeGif, false);
+        ele("#b_btn").addEventListener('click', makeGif, false);
+        gif = new GIF({
+            workers: 4,
+            quality: 10,
+            workerScript: 'gif.worker.js',
+            width: neww,
+            height: newh
+        });
     };
 
     return new Zweigif();
@@ -99,19 +120,25 @@ zweiGif = (function () {
 
 
 var gui = require('nw.gui'),
-    win = gui.Window.get();
+    win = gui.Window.get(),
+    newh = ele('#gif_h'),
+    neww = ele('#gif_w');
 
-zweiGif.getGif();
 
-
-document.querySelector("#close").addEventListener('click', function () {
+ele("#close").addEventListener('click', function () {
     win.close();
 }, false);
 
-document.querySelector('#file').addEventListener("change", function (evt) {
-    document.querySelector("#zweiVideo").setAttribute("src", this.value);
+ele('#file').addEventListener("change", function (evt) {
+    ele("#zweiVideo").setAttribute("src", this.value);
 }, false);
 
-document.querySelector('#file_btn').addEventListener("click", function () {
-    document.querySelector("#file").click();
+ele('#file_btn').addEventListener("click", function () {
+    ele("#file").click();
 }, false);
+
+ele('#reset_btn').addEventListener('click', function () {
+    zweiGif.setGif(parseInt(neww.value), parseInt(newh.value));
+    zweiGif.makeGif();
+});
+
