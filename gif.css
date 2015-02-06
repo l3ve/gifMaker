@@ -7,6 +7,7 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    background-color: rgb(80,80,80);
 }
 
 video {
@@ -26,10 +27,31 @@ img {
     line-height: 30px;
     text-align: center;
     font-size: 14px;
+    border:none;
     border-radius: 3px;
     margin: 5px;
     cursor: pointer;
-    color: #000;
+    color: #fff;
+    background-color: rgb(34,30,31);
+}
+.btn:hover {
+    opacity: 0.7;
+}
+.ipt {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    text-indent:15px;
+    font-size: 14px;
+    margin: 5px;
+    border: none;
+    border-bottom: 1px #fff solid;
+    color: #fff;
+    background-color: rgba(1,1,1,0);
+}
+.ipt::-webkit-input-placeholder{
+    color: #fff;
 }
 
 #main {
@@ -39,10 +61,17 @@ img {
     overflow-y: auto;
 }
 #setbtns {
-    width: 350px;
+    width: 480px;
     margin:10px auto;
 }
-
+#file_btn {
+    width: 120px;
+}
+#file_btn:after {
+    content: "▽";
+    position: relative;
+    left: 5px;
+}
 #video-gif {
     margin: 0 auto;
     width: 700px;
@@ -58,7 +87,6 @@ img {
 
 
 #drag {
-    /*-webkit-app-region: drag;*/
     -webkit-user-select: none;
     width: 100%;
     text-align: center;
@@ -73,9 +101,31 @@ img {
     color: #fff;
 }
 
-span.btn {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
+#close {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
     border-radius: 50%;
+    text-align: center;
+    opacity: 0.4;
+    border: 2px rgba(255,255,255,0) solid;
+    -webkit-transition:-webkit-transform 0.5s;
+    background: url("https://coding.net/events/images/close.svg")no-repeat center;
+}
+#close:hover {
+    -webkit-transform:rotate(90deg);
+    border: 2px #fff solid;
+    opacity: 1;
+
+}
+@-webkit-keyframes a{
+    0%{color:red;background-color:#000;}
+    50%{color:#000;background-color:red;}
+    100%{color:red;background-color:#000;}
+}
+.flashing {
+    -webkit-animation:a 3s infinite;
 }

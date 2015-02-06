@@ -14,28 +14,28 @@
 </head>
 <body>
 <section id="main">
+    <span id="close"></span>
+
     <div id="setbtns">
-    <input id="file" type="file" style="display: none" accept=".mp4">
-    <i id="file_btn" class="btn">选择视频文件</i>
-    <input id="gif_w" class="btn" placeholder="gif的长度">
-    <input id="gif_h" class="btn" placeholder="gif的宽度">
-        <i id="reset_btn" class="btn">sure</i>
+        <input id="file" type="file" style="display: none" accept=".mp4">
+        <span id="file_btn" class="btn">选择视频文件</span>
+        <input id="gif_w" class="ipt" placeholder="GIF的长度">
+        <input id="gif_h" class="ipt" placeholder="GIF的宽度">
+        <span id="reset_btn" class="btn">sure</span>
 
     </div>
     <div id="video-gif">
-        <video id="zweiVideo" controls>
+        <video id="zweiVideo" controls preload="metadata">
             <source src="321.mp4">
         </video>
 
     </div>
 
-    <i class="btn" id="b_btn">start</i>
-    <span class="btn" id="close">X</span>
 </section>
 <section id="drag">
 
 
-    <p id="per">1</p>
+    <p id="per">完成度</p>
 </section>
 </body>
 <script src="gif.js"></script>

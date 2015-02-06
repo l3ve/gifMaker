@@ -54,11 +54,22 @@ zweiGif = (function () {
         i = requestAnimationFrame(loop);
     }
 
+    document.onkeydown = function () {
+        console.log(window.event.keyCode);
+        if (window.event && window.event.keyCode == 32) {
+            event.cancelBubble = true;
+            makeGif();
+        }
+    };
+
     function makeGif() {
         if (status == "start") {
             gif.abort();
             gif.frames = [];
             i = loop();
+            document.querySelector("#drag").classList.add("flashing");
+            ele("#per").innerHTML = "录制中！~";
+
             status = "end";
             this.innerHTML = "end";
         } else {
@@ -79,8 +90,9 @@ zweiGif = (function () {
                 div = document.createElement("div");
             img.setAttribute("src", URL.createObjectURL(blob));
             div.setAttribute("class", "box");
-            div.insertBefore(img);
-            ele("#video-gif").insertBefore(div);
+            div.appendChild(img);
+            ele("#video-gif").appendChild(div);
+            document.querySelector("#drag").classList.remove("flashing");
 
             //消除子元素继承父元素的事件
             img.addEventListener('click', function (e) {
@@ -92,11 +104,13 @@ zweiGif = (function () {
 
         });
         gif.on('progress', function (p) {
-            ele("#per").innerHTML = Math.round(p * 100) + "%";
+            if (p == 1) {
+                ele("#per").innerHTML = "已完成！~";
+            } else {
+                ele("#per").innerHTML = Math.round(p * 100) + "%";
+            }
         });
     };
-    ele("#b_btn").addEventListener('click', makeGif, false);
-
 
     Zweigif.prototype.setGif = function (neww, newh) {
         gif = null;
@@ -104,11 +118,9 @@ zweiGif = (function () {
         h = newh;
         canvas.width = w;
         canvas.height = h;
-        ele("#b_btn").removeEventListener('click', makeGif, false);
-        ele("#b_btn").addEventListener('click', makeGif, false);
         gif = new GIF({
             workers: 4,
-            quality: 10,
+            quality: 1,
             workerScript: 'gif.worker.js',
             width: neww,
             height: newh
@@ -119,15 +131,11 @@ zweiGif = (function () {
 })();
 
 
-var gui = require('nw.gui'),
-    win = gui.Window.get(),
-    newh = ele('#gif_h'),
+var newh = ele('#gif_h'),
     neww = ele('#gif_w');
+zweiGif.makeGif();
 
 
-ele("#close").addEventListener('click', function () {
-    win.close();
-}, false);
 
 ele('#file').addEventListener("change", function (evt) {
     ele("#zweiVideo").setAttribute("src", this.value);
@@ -142,3 +150,6 @@ ele('#reset_btn').addEventListener('click', function () {
     zweiGif.makeGif();
 });
 
+ele("#close").addEventListener('click', function () {
+    win.close();
+}, false);
