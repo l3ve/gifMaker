@@ -131,7 +131,9 @@ zweiGif = (function () {
 })();
 
 
-var newh = ele('#gif_h'),
+var gui = require('nw.gui'),
+    win = gui.Window.get(),
+    newh = ele('#gif_h'),
     neww = ele('#gif_w');
 zweiGif.makeGif();
 
