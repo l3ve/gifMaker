@@ -7,8 +7,8 @@
     "version": "0.1.0",
     "window": {
         "title": "gifCanvas",
-//        "icon": "link.png",
-        "toolbar": true,
+        "icon": "js.png",
+        "toolbar": false,
         "frame": false,
         "width": 800,
         "height": 600,
