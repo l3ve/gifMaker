@@ -1,7 +1,7 @@
 # gifMaker
 在zweiCanvas里有简单功能的展示,录制事件从点击播放到点击暂停
 
-[传送门](http://nodecanvas.duapp.com/zweiGif.html "zweiGif")
+[DEMO](http://nodecanvas.duapp.com/zweiGif.html "zweiGif")
 ###读取本地mp4格式视频转为gif图(window)
 
 可以设置gif图长宽,按`空格键`开始到`空格键`结束.
