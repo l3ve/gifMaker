@@ -1,0 +1,11 @@
+node_modules/
+
+Electron.app/Contents/Frameworks
+
+Electron.app/Contents/MacOS
+
+Electron.app/Contents/Resources
+
+info.plist
+
+PkgInfo

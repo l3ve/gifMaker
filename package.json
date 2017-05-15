@@ -1,24 +1,12 @@
 {
-    "main": "index.html",
-    "nodejs": true,
-    "node-main": "gifNode.js",
-    "name": "gifCanvas",
-    "description": "video to gif",
-    "version": "0.1.0",
-    "window": {
-        "title": "gifCanvas",
-        "icon": "js.png",
-        "toolbar": false,
-        "frame": false,
-        "width": 800,
-        "height": 600,
-        "position": "center",
-        "min_width": 400,
-        "min_height": 200,
-        "max_width": 800,
-        "max_height": 600
-    },
-    "webkit": {
-        "plugin": true
-    }
+  "name": "img",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {},
+  "scripts": {
+    "app": "./node_modules/.bin/electron ."
+  },
+  "devDependencies": {
+    "electron": "^1.6.7"
+  }
 }
