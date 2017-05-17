@@ -1,0 +1,17 @@
+{
+  "presets": [
+    "react",
+    [
+      "latest",
+      {
+        "es2015": {
+          "modules": false
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "transform-runtime",
+    "transform-class-properties"
+  ]
+}
