@@ -36,6 +36,7 @@ module.exports = {
     // 如果extensions失败,尝试不补全
     enforceExtension: false
   },
+  externals: { electron: 'commonjs electron' },
   module: {
     // 减少依赖的查找
     noParse: [

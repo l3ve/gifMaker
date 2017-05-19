@@ -49,6 +49,21 @@
     "no-param-reassign": 1,
     "func-names": 1,
     "react/jsx-uses-vars": 1,
-    "react/jsx-uses-react": 1
+    "react/jsx-uses-react": 1,
+    "class-methods-use-this": [
+      "error",
+      {
+        "exceptMethods": [
+          "render",
+          "componentWillMount",
+          "componentDidMount",
+          "componentWillReceiveProps",
+          "shouldComponentUpdate",
+          "componentWillUpdate",
+          "componentDidUpdate",
+          "componentWillUnmount"
+        ]
+      }
+    ]
   }
 }
