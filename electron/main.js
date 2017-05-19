@@ -40,7 +40,8 @@ function createWindow() {
   global.mainWindow.loadURL(`file://${__dirname}/index.html`);
   // 启用开发工具。
   mainWindow.openDevTools();
-  // 开启代理
+  // 启用服务
+  require('./server');
   console.log(`当前node版本 : ${process.version}`);
   global.mainWindow.on('closed', () => {
     global.mainWindow = null;
