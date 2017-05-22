@@ -693,7 +693,6 @@ var Canvas = function (_Component) {
       var reader = new FileReader();
       reader.readAsDataURL(target);
       reader.onload = function (file) {
-        console.log('reader : ', file);
         imgDom.src = file.target.result;
         __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('imgToSteam', file.target.result);
       };
@@ -705,7 +704,7 @@ var Canvas = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].on('img', function (event, imgBuffer) {
-        console.log(imgBuffer.toLocaleString());
+        console.log(imgBuffer);
       });
     }
   }, {

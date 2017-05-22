@@ -12,7 +12,6 @@ class Canvas extends Component {
     const reader = new FileReader();
     reader.readAsDataURL(target);
     reader.onload = (file) => {
-      console.log('reader : ', file);
       imgDom.src = file.target.result;
       ipcRenderer.send('imgToSteam', file.target.result);
     }
@@ -22,7 +21,7 @@ class Canvas extends Component {
   }
   componentDidMount() {
     ipcRenderer.on('img', (event, imgBuffer) => {
-      console.log(imgBuffer.toLocaleString());
+      console.log(imgBuffer);
     })
   }
 

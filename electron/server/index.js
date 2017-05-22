@@ -10,5 +10,5 @@ ipcMain.on('asynchronous-message', (event, arg) => {
 ipcMain.on('imgToSteam', (event, base64Str) => {
   let buf = Buffer.from(base64Str, 'base64');
   console.log(buf);
-  event.sender.send('img', buf)
+  event.sender.send('img', buf.toString('binary'))
 })
