@@ -691,10 +691,13 @@ var Canvas = function (_Component) {
       var imgDom = new Image();
       var ctx = this.refs.canvas.getContext('2d');
       var reader = new FileReader();
-      reader.readAsDataURL(target);
+      // reader.readAsDataURL(target);
+      // reader.readAsArrayBuffer(target);
+      reader.readAsBinaryString(target);
       reader.onload = function (file) {
-        imgDom.src = file.target.result;
-        __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('imgToSteam', file.target.result);
+        console.log(file.target.result);
+        // imgDom.src = file.target.result;
+        // ipcRenderer.send('imgToSteam', file.target.result);
       };
       imgDom.onload = function () {
         ctx.drawImage(imgDom, 0, 0);

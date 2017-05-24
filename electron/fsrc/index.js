@@ -21,7 +21,7 @@ class Index extends Component {
       <div>
         <Canvas cls='canvas' target={objImg} />
         <input type="file" ref='fileInput' onChange={this.inputChange} />
-      </div>
+      </div >
     );
   }
 }
