@@ -1,33 +1,65 @@
 import React, { Component } from 'react'
 import { ipcRenderer } from 'electron'
 import './style.styl'
+import { png10 } from '../../png.json';
 
 class Canvas extends Component {
   constructor(params) {
     super(params)
+    this.imageData = []
+    this.buildImageByPNGdata()
   }
   data(target) {
     const imgDom = new Image();
     const ctx = this.refs.canvas.getContext('2d');
     const reader = new FileReader();
-    // reader.readAsDataURL(target);
-    // reader.readAsArrayBuffer(target);
     reader.readAsBinaryString(target);
     reader.onload = (file) => {
-      console.log(file.target.result);
+      let image = this.stringToAscii(file.target.result, 10);
       // imgDom.src = file.target.result;
-      // ipcRenderer.send('imgToSteam', file.target.result);
+      // console.log(image);
+      // console.log(file.target.result);
+      image = this.stringToAscii(this.filterIHDR(image.join('-')).split('-'));
+      // image = this.asciiToString(image);
+      console.log(image);
+      ipcRenderer.send('imgToSteam', image);
     }
     imgDom.onload = () => {
       ctx.drawImage(imgDom, 0, 0);
     }
   }
-  componentDidMount() {
-    ipcRenderer.on('img', (event, imgBuffer) => {
-      console.log(imgBuffer);
+  buildImageByPNGdata() {
+    let { Signature, IHDR, IDAT, IEND } = png10;
+    [Signature, IHDR, IDAT, IEND] = this.transformToArray({ Signature, IHDR, IDAT, IEND });
+    console.log(Signature, IHDR, IDAT, IEND);
+  }
+  transformToArray(para = {}) {
+    let res = {}
+    let keys = Object.keys(para);
+    return keys.map((key) => {
+      return para[key].split(' ')
     })
   }
-
+  stringToAscii(str, index = 16) {
+    return Array.prototype.map.call(str, (i) => {
+      return i.charCodeAt().toString(index);
+    })
+  }
+  asciiToString(arr) {
+    let str = '';
+    arr.forEach((ascii) => {
+      str += String.fromCharCode(ascii);
+    })
+    return str
+  }
+  filterIHDR(str) {
+    return str.split('2-50-58-ea')[0] + '2-50-58-ea-0-0-0-18-49-44-41-54' + str.split('2-50-58-ea')[1].split('0-0-0-18-49-44-41-54')[1]
+  }
+  componentDidMount() {
+    ipcRenderer.on('img', (event, imgBuffer) => {
+      // console.log('imgBuffer:', imgBuffer);
+    })
+  }
   componentWillReceiveProps(nextProps) {
     const { target } = nextProps;
     target && this.data(target)

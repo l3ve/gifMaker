@@ -2,13 +2,16 @@
   "name": "img",
   "version": "0.0.1",
   "main": "main.js",
-  "dependencies": {},
+  "dependencies": {
+    "electron-rebuild": "^1.5.11",
+    "opencv": "^6.0.0"
+  },
   "scripts": {
     "app": "./node_modules/.bin/electron .",
-    "dev": "webpack --watch"
+    "dev": "webpack --watch",
+    "rebuild": "./node_modules/.bin/electron-rebuild"
   },
   "devDependencies": {
-    "electron": "^1.6.7",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",
@@ -18,6 +21,7 @@
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.5",
     "css-loader": "^0.28.0",
+    "electron": "^1.6.7",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.1.3",
     "eslint-loader": "^1.7.1",

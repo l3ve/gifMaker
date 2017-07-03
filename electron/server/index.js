@@ -8,7 +8,10 @@ ipcMain.on('asynchronous-message', (event, arg) => {
 })
 
 ipcMain.on('imgToSteam', (event, base64Str) => {
-  let buf = Buffer.from(base64Str, 'base64');
-  console.log(buf);
-  event.sender.send('img', buf.toString('ascii'))
+  let buf = Buffer.from(base64Str);
+  fs.writeFile('./new.png', buf, (err) => {
+    err ? console.log(err) : null
+  })
+  // console.log(buf);
+  // event.sender.send('img', parseInt(base64Str, '16'))
 })
