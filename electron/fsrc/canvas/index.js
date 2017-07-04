@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ipcRenderer } from 'electron'
 import './style.styl'
-import { png10 } from '../../png.json';
+import { png16 } from '../../png.json';
 
 class Canvas extends Component {
   constructor(params) {
@@ -15,12 +15,11 @@ class Canvas extends Component {
     const reader = new FileReader();
     reader.readAsBinaryString(target);
     reader.onload = (file) => {
-      let image = this.stringToAscii(file.target.result, 10);
+      console.log('图片的源码：');
+      console.log(file.target.result);
+      let image = this.toAscii(file.target.result);
       // imgDom.src = file.target.result;
-      // console.log(image);
-      // console.log(file.target.result);
-      image = this.stringToAscii(this.filterIHDR(image.join('-')).split('-'));
-      // image = this.asciiToString(image);
+      image = this.filterIHDR(image.join(' '));
       console.log(image);
       ipcRenderer.send('imgToSteam', image);
     }
@@ -29,9 +28,9 @@ class Canvas extends Component {
     }
   }
   buildImageByPNGdata() {
-    let { Signature, IHDR, IDAT, IEND } = png10;
+    let { Signature, IHDR, IDAT, IEND } = png16;
     [Signature, IHDR, IDAT, IEND] = this.transformToArray({ Signature, IHDR, IDAT, IEND });
-    console.log(Signature, IHDR, IDAT, IEND);
+    // console.log(Signature, IHDR, IDAT, IEND);
   }
   transformToArray(para = {}) {
     let res = {}
@@ -40,21 +39,29 @@ class Canvas extends Component {
       return para[key].split(' ')
     })
   }
-  stringToAscii(str, index = 16) {
-    return Array.prototype.map.call(str, (i) => {
+  toAscii(src, index = 16) {
+    return Array.prototype.map.call(src, (i) => {
       return i.charCodeAt().toString(index);
+    })
+  }
+  hexadecimalToDecimal(vArr) {
+    return vArr.map((v) => {
+      return parseInt(v, 16)
     })
   }
   asciiToString(arr) {
     let str = '';
+    if (typeof arr === 'string') arr = arr.split(' ')
     arr.forEach((ascii) => {
       str += String.fromCharCode(ascii);
     })
     return str
   }
   filterIHDR(str) {
-    return str.split('2-50-58-ea')[0] + '2-50-58-ea-0-0-0-18-49-44-41-54' + str.split('2-50-58-ea')[1].split('0-0-0-18-49-44-41-54')[1]
+    const srcData = str.split('2 50 58 ea')[0] + '2 50 58 ea 0 0 0 18 49 44 41 54' + str.split('2 50 58 ea')[1].split('0 0 0 18 49 44 41 54')[1]
+    return this.hexadecimalToDecimal(srcData.split(' '))
   }
+
   componentDidMount() {
     ipcRenderer.on('img', (event, imgBuffer) => {
       // console.log('imgBuffer:', imgBuffer);
