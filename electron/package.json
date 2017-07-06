@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "main.js",
   "dependencies": {
+    "crc": "^3.4.4",
     "electron-rebuild": "^1.5.11",
     "opencv": "^6.0.0"
   },

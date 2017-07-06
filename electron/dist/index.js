@@ -792,11 +792,13 @@ var Canvas = function (_Component) {
       reader.onload = function (file) {
         console.log('图片的源码：');
         console.log(file.target.result);
-        var image = _this2.toAscii(file.target.result);
+        var image16 = _this2.toAscii(file.target.result);
+        var image = _this2.toAscii(file.target.result, 10);
         // imgDom.src = file.target.result;
-        image = _this2.filterIHDR(image.join(' '));
-        console.log(image);
-        __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].send('imgToSteam', image);
+        // console.log(image);
+        var image10 = _this2.filterIHDR(image16.join(' '));
+        console.log(image10.join(' '));
+        __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].send('saveImage', image10);
       };
       imgDom.onload = function () {
         ctx.drawImage(imgDom, 0, 0);
@@ -810,7 +812,9 @@ var Canvas = function (_Component) {
           IDAT = __WEBPACK_IMPORTED_MODULE_10__png_json__["png16"].IDAT,
           IEND = __WEBPACK_IMPORTED_MODULE_10__png_json__["png16"].IEND;
 
-      // console.log(Signature, IHDR, IDAT, IEND);
+      var str = '73 72 68 82 00 00 00 10 00 00 00 10 08 02 00 00 00';
+      var srcIdat = '\x49\x44\x41\x54\x78\xda\x62\xfc\xff\xff\x3f\x03\x6e\xc0\xc4\x80\x17\x8c\x54\x69\x80\x00\x03\x00\xa5\xe3\x03\x11';
+
       var _transformToArray = this.transformToArray({ Signature: Signature, IHDR: IHDR, IDAT: IDAT, IEND: IEND });
 
       var _transformToArray2 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_slicedToArray___default()(_transformToArray, 4);
@@ -819,6 +823,13 @@ var Canvas = function (_Component) {
       IHDR = _transformToArray2[1];
       IDAT = _transformToArray2[2];
       IEND = _transformToArray2[3];
+
+      var crc = this.getCrc(srcIdat);
+      // let idat = this.decompressIDAT({ str: this.toHexadecimal(srcIdat.split(' ')).join(' ') });
+      var idat = this.decompressIDAT({ str: srcIdat });
+      console.log(srcIdat);
+      console.log('crc:', crc);
+      console.log('idat:', idat);
     }
   }, {
     key: 'transformToArray',
@@ -841,8 +852,15 @@ var Canvas = function (_Component) {
       });
     }
   }, {
-    key: 'hexadecimalToDecimal',
-    value: function hexadecimalToDecimal(vArr) {
+    key: 'toHexadecimal',
+    value: function toHexadecimal(vArr) {
+      return vArr.map(function (v) {
+        return (v * 1).toString(16);
+      });
+    }
+  }, {
+    key: 'toDecimal',
+    value: function toDecimal(vArr) {
       return vArr.map(function (v) {
         return parseInt(v, 16);
       });
@@ -858,10 +876,26 @@ var Canvas = function (_Component) {
       return str;
     }
   }, {
+    key: 'getCrc',
+    value: function getCrc(src) {
+      return __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].sendSync('getCRC', src);
+    }
+  }, {
+    key: 'compressIDAT',
+    value: function compressIDAT(src) {
+      return __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].sendSync('handleIDAT', src);
+    }
+  }, {
+    key: 'decompressIDAT',
+    value: function decompressIDAT(src) {
+      console.log(src);
+      return __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].sendSync('decompressIDAT', src);
+    }
+  }, {
     key: 'filterIHDR',
     value: function filterIHDR(str) {
       var srcData = str.split('2 50 58 ea')[0] + '2 50 58 ea 0 0 0 18 49 44 41 54' + str.split('2 50 58 ea')[1].split('0 0 0 18 49 44 41 54')[1];
-      return this.hexadecimalToDecimal(srcData.split(' '));
+      return this.toDecimal(srcData.split(' '));
     }
   }, {
     key: 'componentDidMount',

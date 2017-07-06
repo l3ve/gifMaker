@@ -17,11 +17,13 @@ class Canvas extends Component {
     reader.onload = (file) => {
       console.log('图片的源码：');
       console.log(file.target.result);
-      let image = this.toAscii(file.target.result);
+      let image16 = this.toAscii(file.target.result);
+      let image = this.toAscii(file.target.result, 10);
       // imgDom.src = file.target.result;
-      image = this.filterIHDR(image.join(' '));
-      console.log(image);
-      ipcRenderer.send('imgToSteam', image);
+      // console.log(image);
+      let image10 = this.filterIHDR(image16.join(' '));
+      console.log(image10.join(' '));
+      ipcRenderer.send('saveImage', image10);
     }
     imgDom.onload = () => {
       ctx.drawImage(imgDom, 0, 0);
@@ -29,8 +31,15 @@ class Canvas extends Component {
   }
   buildImageByPNGdata() {
     let { Signature, IHDR, IDAT, IEND } = png16;
+    const str = '73 72 68 82 00 00 00 10 00 00 00 10 08 02 00 00 00';
+    const srcIdat = '\x49\x44\x41\x54\x78\xda\x62\xfc\xff\xff\x3f\x03\x6e\xc0\xc4\x80\x17\x8c\x54\x69\x80\x00\x03\x00\xa5\xe3\x03\x11';
     [Signature, IHDR, IDAT, IEND] = this.transformToArray({ Signature, IHDR, IDAT, IEND });
-    // console.log(Signature, IHDR, IDAT, IEND);
+    let crc = this.getCrc(srcIdat);
+    // let idat = this.decompressIDAT({ str: this.toHexadecimal(srcIdat.split(' ')).join(' ') });
+    let idat = this.decompressIDAT({ str: srcIdat });
+    console.log(srcIdat);
+    console.log('crc:', crc);
+    console.log('idat:', idat);
   }
   transformToArray(para = {}) {
     let res = {}
@@ -44,7 +53,12 @@ class Canvas extends Component {
       return i.charCodeAt().toString(index);
     })
   }
-  hexadecimalToDecimal(vArr) {
+  toHexadecimal(vArr) {
+    return vArr.map((v) => {
+      return (v * 1).toString(16)
+    })
+  }
+  toDecimal(vArr) {
     return vArr.map((v) => {
       return parseInt(v, 16)
     })
@@ -57,9 +71,19 @@ class Canvas extends Component {
     })
     return str
   }
+  getCrc(src) {
+    return ipcRenderer.sendSync('getCRC', src);
+  }
+  compressIDAT(src) {
+    return ipcRenderer.sendSync('handleIDAT', src);
+  }
+  decompressIDAT(src) {
+    console.log(src);
+    return ipcRenderer.sendSync('decompressIDAT', src);
+  }
   filterIHDR(str) {
     const srcData = str.split('2 50 58 ea')[0] + '2 50 58 ea 0 0 0 18 49 44 41 54' + str.split('2 50 58 ea')[1].split('0 0 0 18 49 44 41 54')[1]
-    return this.hexadecimalToDecimal(srcData.split(' '))
+    return this.toDecimal(srcData.split(' '))
   }
 
   componentDidMount() {
