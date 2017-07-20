@@ -797,7 +797,7 @@ var Canvas = function (_Component) {
         // imgDom.src = file.target.result;
         // console.log(image);
         var image10 = _this2.filterIHDR(image16.join(' '));
-        console.log(image10.join(' '));
+        console.log(image10);
         __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].send('saveImage', image10);
       };
       imgDom.onload = function () {
@@ -824,11 +824,12 @@ var Canvas = function (_Component) {
       IDAT = _transformToArray2[2];
       IEND = _transformToArray2[3];
 
-      var crc = this.getCrc(srcIdat);
+      var crc = this.getCrc(str);
       // let idat = this.decompressIDAT({ str: this.toHexadecimal(srcIdat.split(' ')).join(' ') });
       var idat = this.decompressIDAT({ str: srcIdat });
       console.log(srcIdat);
       console.log('crc:', crc);
+      // console.log(this.asciiToString(this.toDecimal(crc)));
       console.log('idat:', idat);
     }
   }, {
@@ -888,7 +889,7 @@ var Canvas = function (_Component) {
   }, {
     key: 'decompressIDAT',
     value: function decompressIDAT(src) {
-      console.log(src);
+      // console.log(src);
       return __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].sendSync('decompressIDAT', src);
     }
   }, {

@@ -22,7 +22,7 @@ class Canvas extends Component {
       // imgDom.src = file.target.result;
       // console.log(image);
       let image10 = this.filterIHDR(image16.join(' '));
-      console.log(image10.join(' '));
+      console.log(image10);
       ipcRenderer.send('saveImage', image10);
     }
     imgDom.onload = () => {
@@ -34,11 +34,12 @@ class Canvas extends Component {
     const str = '73 72 68 82 00 00 00 10 00 00 00 10 08 02 00 00 00';
     const srcIdat = '\x49\x44\x41\x54\x78\xda\x62\xfc\xff\xff\x3f\x03\x6e\xc0\xc4\x80\x17\x8c\x54\x69\x80\x00\x03\x00\xa5\xe3\x03\x11';
     [Signature, IHDR, IDAT, IEND] = this.transformToArray({ Signature, IHDR, IDAT, IEND });
-    let crc = this.getCrc(srcIdat);
+    let crc = this.getCrc(str);
     // let idat = this.decompressIDAT({ str: this.toHexadecimal(srcIdat.split(' ')).join(' ') });
     let idat = this.decompressIDAT({ str: srcIdat });
     console.log(srcIdat);
     console.log('crc:', crc);
+    // console.log(this.asciiToString(this.toDecimal(crc)));
     console.log('idat:', idat);
   }
   transformToArray(para = {}) {
@@ -78,7 +79,7 @@ class Canvas extends Component {
     return ipcRenderer.sendSync('handleIDAT', src);
   }
   decompressIDAT(src) {
-    console.log(src);
+    // console.log(src);
     return ipcRenderer.sendSync('decompressIDAT', src);
   }
   filterIHDR(str) {
