@@ -1,10 +1,30 @@
 var { app, BrowserWindow, Menu } = require('electron');
 var { WINDOW_WIDTH, WINDOW_HEIGHT } = require('./config.json');
 var { buildFromTemplate } = require('./menu.js');
+var menu = Menu.buildFromTemplate(buildFromTemplate);
 
 global.mainWindow = null;
 
-var menu = Menu.buildFromTemplate(buildFromTemplate);
+function createWindow() {
+  Menu.setApplicationMenu(menu);
+  global.mainWindow = new BrowserWindow({
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT
+    // type: 'desktop',
+    // titleBarStyle: 'hidden'
+  });
+  global.mainWindow.loadURL(`file://${__dirname}/index.html`);
+  // 启用开发工具。
+  global.mainWindow.openDevTools();
+  // 启用服务
+  require('./server');
+  console.log(`当前node版本 : ${process.version}`);
+  global.mainWindow.on('closed', () => {
+    global.mainWindow = null;
+    app.quit();
+  });
+}
+
 
 app.on('ready', createWindow);
 
@@ -27,24 +47,3 @@ app.on('activate', () => {
 
 // app.setBadgeCount(10)//提示新消息
 app.dock.bounce();
-
-
-function createWindow() {
-  Menu.setApplicationMenu(menu);
-  global.mainWindow = new BrowserWindow({
-    width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT,
-    // type: 'desktop',
-    // titleBarStyle: 'hidden'
-  });
-  global.mainWindow.loadURL(`file://${__dirname}/index.html`);
-  // 启用开发工具。
-  mainWindow.openDevTools();
-  // 启用服务
-  require('./server');
-  console.log(`当前node版本 : ${process.version}`);
-  global.mainWindow.on('closed', () => {
-    global.mainWindow = null;
-    app.quit();
-  });
-}

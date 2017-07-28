@@ -5,6 +5,7 @@
   "dependencies": {
     "crc": "^3.4.4",
     "electron-rebuild": "^1.5.11",
+    "get-pixels": "^3.3.0",
     "opencv": "^6.0.0"
   },
   "scripts": {

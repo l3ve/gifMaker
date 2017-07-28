@@ -90,20 +90,18 @@ const TABLE = [
 ];
 
 
-module.exports = function crc32(buf, previous) {
+function crc32(buf) {
   if (!Buffer.isBuffer(buf)) buf = Buffer.from(buf);
-  let crc = previous === 0 ? 0 : ~~previous ^ -1;
+  let crc = -1;
   for (let index = 0; index < buf.length; index += 1) {
     let byte = buf[index];
     crc = TABLE[(crc ^ byte) & 0xff] ^ crc >>> 8;
-    console.log(crc, index);
   }
-  console.log(crc, 'fin');
   return crc ^ -1
 }
 
 
-module.exports = function padStart(str, targetLengthSrc, padString) {
+function padStart(str, targetLengthSrc, padString) {
   let targetLength = targetLengthSrc;
   targetLength >>= 0; // floor if number or convert non-number to 0;
   padString = String(padString || ' ');
@@ -115,4 +113,9 @@ module.exports = function padStart(str, targetLengthSrc, padString) {
     padString += padString.repeat(targetLength / padString.length); // append to original to ensure we are longer than needed
   }
   return padString.slice(0, targetLength) + String(str);
+}
+
+module.exports = {
+  crc32,
+  padStart
 }
