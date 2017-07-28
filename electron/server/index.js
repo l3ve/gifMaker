@@ -28,7 +28,7 @@ ipcMain.on('getPNGidat', (event, { str }) => {
     }
     event.returnValue = pixels
   })
-  PNG.readFile('./png.png')
+  PNG.readFile('./new.png')
 })
 
 ipcMain.on('saveImage', (event, base64Str) => {

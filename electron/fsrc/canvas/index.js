@@ -7,7 +7,7 @@ class Canvas extends Component {
   constructor(params) {
     super(params)
     this.imageData = []
-    this.buildImageByPNGdata()
+    // this.buildImageByPNGdata()
   }
   data(target) {
     const imgDom = new Image();
@@ -37,10 +37,10 @@ class Canvas extends Component {
     let { crc10, crc16 } = this.getCrc(str);
     // let idat = this.decompressIDAT({ str: this.toHexadecimal(srcIdat.split(' ')).join(' ') });
     let idat = this.decompressIDAT({ str: srcIdat });
-    console.log(srcIdat);
-    console.log('crc:', crc10, crc16);
+    // console.log(srcIdat);
+    // console.log('crc:', crc10, crc16);
     // console.log(this.asciiToString(this.toDecimal(crc)));
-    console.log('idat:', idat);
+    // console.log('idat:', idat);
   }
   transformToArray(para = {}) {
     let res = {}
