@@ -2,12 +2,12 @@ module.exports = {
 
   PNG_SIGNATURE: [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a],
 
-  TYPE_IHDR: 0x49484452,
-  TYPE_IEND: 0x49454e44,
-  TYPE_IDAT: 0x49444154,
-  TYPE_PLTE: 0x504c5445,
-  TYPE_tRNS: 0x74524e53, // eslint-disable-line camelcase
-  TYPE_gAMA: 0x67414d41, // eslint-disable-line camelcase
+  TYPE_IHDR: [0x49, 0x48, 0x44, 0x52],
+  TYPE_IEND: [0x49, 0x45, 0x4e, 0x44],
+  TYPE_IDAT: [0x49, 0x44, 0x41, 0x54],
+  TYPE_PLTE: [0x50, 0x4c, 0x54, 0x45],
+  TYPE_tRNS: [0x74, 0x52, 0x4e, 0x53],
+  TYPE_gAMA: [0x67, 0x41, 0x4d, 0x41],
 
   // color-type bits
   COLORTYPE_GRAYSCALE: 0,
@@ -20,11 +20,11 @@ module.exports = {
   COLORTYPE_COLOR_ALPHA: 6,
 
   COLORTYPE_TO_BPP_MAP: {
-    0: 1,
-    2: 3,
-    3: 1,
-    4: 2,
-    6: 4
+    0: 1,  // 灰度图像
+    2: 3,  // 彩色图像
+    3: 1,  // 索引彩色图像
+    4: 2,  // 带alpha灰度图像
+    6: 4   // 带alpha彩色图像
   },
 
   GAMMA_DIVISION: 100000,

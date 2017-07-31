@@ -115,7 +115,33 @@ function padStart(str, targetLengthSrc, padString) {
   return padString.slice(0, targetLength) + String(str);
 }
 
+function getByteWidth({ width, bpp, depth }) {
+  let byteWidth = width * bpp;
+  if (depth !== 8) {
+    byteWidth = Math.ceil(byteWidth / (8 / depth));
+  }
+  return byteWidth;
+}
+
+function paethPredictor(left, above, upLeft) {
+
+  var paeth = (left + above) - upLeft;
+  var pLeft = Math.abs(paeth - left);
+  var pAbove = Math.abs(paeth - above);
+  var pUpLeft = Math.abs(paeth - upLeft);
+
+  if (pLeft <= pAbove && pLeft <= pUpLeft) {
+    return left;
+  }
+  if (pAbove <= pUpLeft) {
+    return above;
+  }
+  return upLeft;
+}
+
 module.exports = {
   crc32,
-  padStart
+  padStart,
+  getByteWidth,
+  paethPredictor
 }

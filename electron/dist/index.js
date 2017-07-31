@@ -733,31 +733,22 @@ __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_slicedToArray__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_slicedToArray___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_slicedToArray__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_get_prototype_of__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_get_prototype_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_get_prototype_of__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_possibleConstructorReturn__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_inherits__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_inherits__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_electron__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_electron___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_electron__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__style_styl__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__style_styl___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__style_styl__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__png_json__ = __webpack_require__(79);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__png_json___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__png_json__);
-
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_electron__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_electron___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_electron__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__style_styl__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__style_styl___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__style_styl__);
 
 
 
@@ -768,19 +759,19 @@ __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 
 var Canvas = function (_Component) {
-  __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_inherits___default()(Canvas, _Component);
+  __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(Canvas, _Component);
 
   function Canvas(params) {
-    __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck___default()(this, Canvas);
+    __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, Canvas);
 
-    var _this = __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Canvas.__proto__ || __WEBPACK_IMPORTED_MODULE_2_babel_runtime_core_js_object_get_prototype_of___default()(Canvas)).call(this, params));
+    var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Canvas.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(Canvas)).call(this, params));
 
     _this.imageData = [];
     _this.buildImageByPNGdata();
     return _this;
   }
 
-  __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_createClass___default()(Canvas, [{
+  __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Canvas, [{
     key: 'data',
     value: function data(target) {
       var _this2 = this;
@@ -788,17 +779,21 @@ var Canvas = function (_Component) {
       var imgDom = new Image();
       var ctx = this.refs.canvas.getContext('2d');
       var reader = new FileReader();
+      var readerCanvas = new FileReader();
       reader.readAsBinaryString(target);
+      readerCanvas.readAsDataURL(target);
+
       reader.onload = function (file) {
         console.log('图片的源码：');
         console.log(file.target.result);
-        var image16 = _this2.toAscii(file.target.result);
-        var image = _this2.toAscii(file.target.result, 10);
-        // imgDom.src = file.target.result;
-        // console.log(image);
-        var image10 = _this2.filterIHDR(image16.join(' '));
-        console.log(image16);
-        __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].send('saveImage', image10);
+        // let image16 = this.toAscii(file.target.result);
+        var image = _this2.toAscii(file.target.result);
+        // let image10 = this.filterIHDR(image16.join(' '));
+        // console.log(image16);
+        __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('saveImage', image);
+      };
+      readerCanvas.onload = function (file) {
+        imgDom.src = file.target.result;
       };
       imgDom.onload = function () {
         ctx.drawImage(imgDom, 0, 0);
@@ -807,101 +802,20 @@ var Canvas = function (_Component) {
   }, {
     key: 'buildImageByPNGdata',
     value: function buildImageByPNGdata() {
-      var Signature = __WEBPACK_IMPORTED_MODULE_10__png_json__["png16"].Signature,
-          IHDR = __WEBPACK_IMPORTED_MODULE_10__png_json__["png16"].IHDR,
-          IDAT = __WEBPACK_IMPORTED_MODULE_10__png_json__["png16"].IDAT,
-          IEND = __WEBPACK_IMPORTED_MODULE_10__png_json__["png16"].IEND;
-
-      var str = '73 72 68 82 00 00 00 10 00 00 00 10 08 02 00 00 00';
-      var srcIdat = '\x49\x44\x41\x54\x78\xda\x62\xfc\xff\xff\x3f\x03\x6e\xc0\xc4\x80\x17\x8c\x54\x69\x80\x00\x03\x00\xa5\xe3\x03\x11';
-
-      var _transformToArray = this.transformToArray({ Signature: Signature, IHDR: IHDR, IDAT: IDAT, IEND: IEND });
-
-      var _transformToArray2 = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_slicedToArray___default()(_transformToArray, 4);
-
-      Signature = _transformToArray2[0];
-      IHDR = _transformToArray2[1];
-      IDAT = _transformToArray2[2];
-      IEND = _transformToArray2[3];
-
-      var _getCrc = this.getCrc(str),
-          crc10 = _getCrc.crc10,
-          crc16 = _getCrc.crc16;
-      // let idat = this.decompressIDAT({ str: this.toHexadecimal(srcIdat.split(' ')).join(' ') });
-
-
-      var idat = this.decompressIDAT({ str: srcIdat });
-      console.log(srcIdat);
-      console.log('crc:', crc10, crc16);
-      // console.log(this.asciiToString(this.toDecimal(crc)));
-      console.log('idat:', idat);
-    }
-  }, {
-    key: 'transformToArray',
-    value: function transformToArray() {
-      var para = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      var res = {};
-      var keys = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_keys___default()(para);
-      return keys.map(function (key) {
-        return para[key].split(' ');
-      });
+      var idat = __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('getPNGidat');
+      console.log(idat);
     }
   }, {
     key: 'toAscii',
     value: function toAscii(src) {
-      var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 16;
-
       return Array.prototype.map.call(src, function (i) {
-        return i.charCodeAt().toString(index);
+        return i.charCodeAt();
       });
-    }
-  }, {
-    key: 'toHexadecimal',
-    value: function toHexadecimal(vArr) {
-      return vArr.map(function (v) {
-        return (v * 1).toString(16);
-      });
-    }
-  }, {
-    key: 'toDecimal',
-    value: function toDecimal(vArr) {
-      return vArr.map(function (v) {
-        return parseInt(v, 16);
-      });
-    }
-  }, {
-    key: 'asciiToString',
-    value: function asciiToString(arr) {
-      var str = '';
-      if (typeof arr === 'string') arr = arr.split(' ');
-      arr.forEach(function (ascii) {
-        str += String.fromCharCode(ascii);
-      });
-      return str;
     }
   }, {
     key: 'getCrc',
     value: function getCrc(src) {
-      return __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].sendSync('getCRC', src);
-    }
-  }, {
-    key: 'decompressIDAT',
-    value: function decompressIDAT(src) {
-      return __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].sendSync('getPNGidat', src);
-    }
-  }, {
-    key: 'filterIHDR',
-    value: function filterIHDR(str) {
-      var srcData = str.split('2 50 58 ea')[0] + '2 50 58 ea 0 0 0 18 49 44 41 54' + str.split('2 50 58 ea')[1].split('0 0 0 18 49 44 41 54')[1];
-      return this.toDecimal(srcData.split(' '));
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      __WEBPACK_IMPORTED_MODULE_8_electron__["ipcRenderer"].on('img', function (event, imgBuffer) {
-        // console.log('imgBuffer:', imgBuffer);
-      });
+      return __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('getCRC', src);
     }
   }, {
     key: 'componentWillReceiveProps',
@@ -915,16 +829,16 @@ var Canvas = function (_Component) {
     value: function render() {
       var cls = this.props.cls;
 
-      return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement('canvas', { ref: 'canvas', className: cls })
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('canvas', { ref: 'canvas', className: cls })
       );
     }
   }]);
 
   return Canvas;
-}(__WEBPACK_IMPORTED_MODULE_7_react__["Component"]);
+}(__WEBPACK_IMPORTED_MODULE_5_react__["Component"]);
 
 /* harmony default export */ __webpack_exports__["a"] = (Canvas);
 
@@ -1026,12 +940,7 @@ module.exports = { "default": __webpack_require__(49), __esModule: true };
 module.exports = { "default": __webpack_require__(50), __esModule: true };
 
 /***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(52), __esModule: true };
-
-/***/ }),
+/* 43 */,
 /* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1091,13 +1000,7 @@ __webpack_require__(72);
 module.exports = __webpack_require__(1).Object.getPrototypeOf;
 
 /***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(73);
-module.exports = __webpack_require__(1).Object.keys;
-
-/***/ }),
+/* 52 */,
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1398,19 +1301,7 @@ __webpack_require__(31)('getPrototypeOf', function($getPrototypeOf){
 });
 
 /***/ }),
-/* 73 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 Object.keys(O)
-var toObject = __webpack_require__(34);
-
-__webpack_require__(31)('keys', function($keys){
-  return function keys(it){
-    return $keys(toObject(it));
-  };
-});
-
-/***/ }),
+/* 73 */,
 /* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1685,26 +1576,7 @@ this._hostNode=null,this._hostParent=null,this._domID=0,this._mountIndex=0,this.
 ;return u.prototype=Error.prototype,T.checkPropTypes=a,T.PropTypes=T,T}},{129:129,137:137,142:142,144:144,147:147}],147:[function(e,t,n){"use strict";t.exports="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED"},{}]},{},[45])(45)}()}()});
 
 /***/ }),
-/* 79 */
-/***/ (function(module, exports) {
-
-module.exports = {
-	"png16": {
-		"Signature": "89 50 4E 47 0D 0A 1A 0A",
-		"IHDR": "49 48 44 52",
-		"IDAT": "49 44 41 54",
-		"IEND": "00 00 00 00 49 45 4E 44 AE 42 60 82"
-	},
-	"png10": {
-		"Signature": "137 80 78 71 13 10 26 10",
-		"IHDR": "73 72 68 82",
-		"IDAT": "73 68 65 84",
-		"IEND": "00 00 00 00 73 69 78 68 174 66 96 130"
-	},
-	"png": ""
-};
-
-/***/ }),
+/* 79 */,
 /* 80 */
 /***/ (function(module, exports) {
 

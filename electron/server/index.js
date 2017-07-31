@@ -1,10 +1,10 @@
 const { ipcMain } = require('electron');
 const fs = require('fs');
-const Buffer = require('Buffer').Buffer;
+// const Buffer = require('Buffer').Buffer;
 const { padStart, crc32 } = require('./tool');
 const getPixels = require('get-pixels');
 const PNG = require('./png')
-
+let times = 0;
 ipcMain.on('getCRC', (event, str) => {
   let str16 = str.split(' ').map((v) => {
     // 根据unicode值 转换为字符串
@@ -16,23 +16,17 @@ ipcMain.on('getCRC', (event, str) => {
   event.returnValue = { crc10, crc16 }
 })
 
-ipcMain.on('decompressIDAT', (event, { str, config = {} }) => {
-  event.returnValue = str
-})
-
-ipcMain.on('getPNGidat', (event, { str }) => {
-  getPixels('./png.png', (err, pixels) => {
-    if (err) {
-      console.log('ERROR:', err);
-      return false
-    }
-    event.returnValue = pixels
+ipcMain.on('getPNGidat', (event) => {
+  PNG.readFile('./red.png', (res) => {
+    event.returnValue = res
   })
-  PNG.readFile('./new.png')
 })
 
-ipcMain.on('saveImage', (event, base64Str) => {
-  let buf = Buffer.from(base64Str);
+ipcMain.on('saveImage', (event, file) => {
+  let buf = Buffer.from(file);
+  PNG.readFile(buf, (res) => {
+    PNG.saveMin(`./min${times += 1}.png`)
+  })
   fs.writeFile('./new.png', buf, (err) => {
     err ? console.log(err) : null
   })
