@@ -2,11 +2,16 @@ const Stream = require('stream');
 const fs = require('fs');
 const zlib = require('zlib');
 const pngConst = require('./const');
-const { getByteWidth, crc32, paethPredictor } = require('../tool')
+const { getByteWidth, crc32, paethPredictor, concat } = require('../tool')
 
 class PNG extends Stream {
   constructor() {
     super()
+    this.encoding = 'utf8'
+    this.initData()
+  }
+  initData() {
+    this.bufferFragments = []
     this.buffers = {}
     this.buffered = 0
     this.metaData = {
@@ -19,8 +24,6 @@ class PNG extends Stream {
     this.pngChunks = {
       signature: new Buffer(pngConst.PNG_SIGNATURE)
     }
-    this.encoding = 'utf8'
-    console.log(Buffer.from([18], 0, 16));
   }
   write(data, cb, encoding = this.encoding) {
     let dataBuffer;
@@ -44,8 +47,25 @@ class PNG extends Stream {
     let xComparison = depth === 8 ? bpp : depth === 16 ? bpp * 2 : 1;
     this.metaData = { width, height, depth, colorType, bpp, xComparison };
   }
+  buildChunk(signature) {
+    const signatureChunk = this.pngChunks[signature];
+    let i = 0
+    let buf = Buffer.from([])
+    while (i < signatureChunk.times) {
+      let chunk = [
+        signatureChunk.len[i],
+        Buffer.from(pngConst['TYPE_' + signature]),
+        signatureChunk.data[i],
+        signatureChunk.crc[i]
+      ]
+      buf = Buffer.concat([buf, ...chunk])
+      i += 1
+    }
+    return buf;
+  }
   parseChunk() {
     let buf = this.buffers.slice(8);
+    this.bufferFragments.push(this.buffers.slice(0, 8));
     this.getMetaData(buf);
     while (this.buffered > 8) {
       let lenBuf = buf.slice(0, 4);
@@ -57,16 +77,25 @@ class PNG extends Stream {
       for (let i = 4; i < 8; i++) {
         name += String.fromCharCode(buf[i]);
       }
+      this.bufferFragments.push(buf.slice(0, length + 12))
       let data = new Buffer(length + 4);
       buf.copy(data, 0, 8, length + 12);
       buf = buf.slice(length + 12);
       crc = data.slice(length);
       data = data.slice(0, length)
       this.buffered -= length + 12;
-      this.pngChunks[name] = {}
-      this.pngChunks[name].data = data
-      this.pngChunks[name].len = lenBuf
-      this.pngChunks[name].crc = crc
+      if (this.pngChunks[name]) {
+        this.pngChunks[name].data = concat(this.pngChunks[name].data, [data])
+        this.pngChunks[name].len = concat(this.pngChunks[name].len, [lenBuf])
+        this.pngChunks[name].crc = concat(this.pngChunks[name].crc, [crc])
+        this.pngChunks[name].times += 1
+      } else {
+        this.pngChunks[name] = {}
+        this.pngChunks[name].data = [data]
+        this.pngChunks[name].len = [lenBuf]
+        this.pngChunks[name].crc = [crc]
+        this.pngChunks[name].times = 1
+      }
     }
   }
   reverseColorData(chunk) {
@@ -94,17 +123,28 @@ class PNG extends Stream {
         case 4:
           lastLine = this.unFilterType4(d, lastLine, byteWidth);
           break;
+        case 0:
+          lastLine = d;
+          break;
         default:
           throw new Error('Unrecognised filter type - ' + d[0]);
       }
       return lastLine
     })
-    this.pngChunks.IDAT.colorData = colorData;
+    this.pngChunks.IDAT.colorData = colorData
   }
   inflateData(data, cb) {
-    zlib.inflate(data, (err, res) => {
-      this.reverseColorData(res)
-      cb(this.pngChunks)
+    let allData = data.reduce((p, n) => {
+      return Buffer.concat([p, n])
+    })
+    zlib.inflate(allData, (err, res) => {
+      if (err) {
+        console.log(err);
+        cb(this.pngChunks)
+      } else {
+        this.reverseColorData(res)
+        cb(this.pngChunks)
+      }
     })
   }
   unFilterType1(rawData, lastLine, byteWidth) {
@@ -160,19 +200,14 @@ class PNG extends Stream {
   }
   saveMin(name) {
     let buf = Buffer.concat([
-      this.pngChunks.signature,
-      this.pngChunks.IHDR.len,
-      new Buffer(pngConst.TYPE_IHDR),
-      this.pngChunks.IHDR.data,
-      this.pngChunks.IHDR.crc,
-      this.pngChunks.IDAT.len,
-      new Buffer(pngConst.TYPE_IDAT),
-      this.pngChunks.IDAT.data,
-      this.pngChunks.IDAT.crc,
-      this.pngChunks.IEND.len,
-      new Buffer(pngConst.TYPE_IEND),
-      this.pngChunks.IEND.crc
+      Buffer.from(this.pngChunks.signature),
+      this.buildChunk('IHDR'),
+      this.buildChunk('IDAT'),
+      this.buildChunk('IEND')
     ])
+    // buf = Buffer.concat(this.bufferFragments)
+    // console.log(this.bufferFragments);
+    // console.log(buf);
     fs.writeFile(name, buf, (err) => {
       if (err) console.log(err);
     })
@@ -193,4 +228,4 @@ class PNG extends Stream {
 }
 
 
-module.exports = new PNG()
+module.exports = PNG

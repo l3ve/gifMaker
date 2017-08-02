@@ -786,10 +786,7 @@ var Canvas = function (_Component) {
       reader.onload = function (file) {
         console.log('图片的源码：');
         console.log(file.target.result);
-        // let image16 = this.toAscii(file.target.result);
         var image = _this2.toAscii(file.target.result);
-        // let image10 = this.filterIHDR(image16.join(' '));
-        // console.log(image16);
         __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('saveImage', image);
       };
       readerCanvas.onload = function (file) {
@@ -811,11 +808,6 @@ var Canvas = function (_Component) {
       return Array.prototype.map.call(src, function (i) {
         return i.charCodeAt();
       });
-    }
-  }, {
-    key: 'getCrc',
-    value: function getCrc(src) {
-      return __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('getCRC', src);
     }
   }, {
     key: 'componentWillReceiveProps',

@@ -19,10 +19,7 @@ class Canvas extends Component {
     reader.onload = (file) => {
       console.log('图片的源码：');
       console.log(file.target.result);
-      // let image16 = this.toAscii(file.target.result);
       let image = this.toAscii(file.target.result);
-      // let image10 = this.filterIHDR(image16.join(' '));
-      // console.log(image16);
       ipcRenderer.send('saveImage', image);
     }
     readerCanvas.onload = (file) => {
@@ -40,9 +37,6 @@ class Canvas extends Component {
     return Array.prototype.map.call(src, (i) => {
       return i.charCodeAt();
     })
-  }
-  getCrc(src) {
-    return ipcRenderer.sendSync('getCRC', src);
   }
   componentWillReceiveProps(nextProps) {
     const { target } = nextProps;
