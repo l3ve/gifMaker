@@ -687,7 +687,7 @@ var Canvas = function (_Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Canvas.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(Canvas)).call(this, params));
 
     _this.imageData = [];
-    _this.buildImageByPNGdata();
+    _this.buildImage();
     return _this;
   }
 
@@ -710,7 +710,7 @@ var Canvas = function (_Component) {
         console.log(file.target.result);
         console.log(file);
         var image = _this2.toUnicode(file.target.result);
-        __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('saveImage', image);
+        __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('compress', image);
       };
 
       // 把图片变成 base64，渲染到 canvas里
@@ -722,8 +722,8 @@ var Canvas = function (_Component) {
       };
     }
   }, {
-    key: 'buildImageByPNGdata',
-    value: function buildImageByPNGdata() {
+    key: 'buildImage',
+    value: function buildImage() {
       var idat = __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('getPNGidat');
       console.log(idat);
     }

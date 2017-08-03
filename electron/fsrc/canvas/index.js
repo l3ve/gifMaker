@@ -7,7 +7,7 @@ class Canvas extends Component {
   constructor(params) {
     super(params)
     this.imageData = []
-    this.buildImageByPNGdata()
+    this.buildImage()
   }
   data(target) {
     const imgDom = new Image();
@@ -24,7 +24,7 @@ class Canvas extends Component {
       console.log(file.target.result);
       console.log(file);
       let image = this.toUnicode(file.target.result);
-      ipcRenderer.send('saveImage', image);
+      ipcRenderer.send('compress', image);
     }
 
     // 把图片变成 base64，渲染到 canvas里
@@ -35,7 +35,7 @@ class Canvas extends Component {
       ctx.drawImage(imgDom, 0, 0);
     }
   }
-  buildImageByPNGdata() {
+  buildImage() {
     let idat = ipcRenderer.sendSync('getPNGidat');
     console.log(idat);
   }
