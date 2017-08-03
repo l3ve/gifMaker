@@ -14,64 +14,45 @@ ipcMain.on('getCRC', (event, str) => {
   }).join('')
   // crc 接受的是unicode字符串
   let crc16 = crc32(str16);
-  // console.log(crc16);
   event.returnValue = { crc16 }
 })
 
 ipcMain.on('getPNGidat', (event) => {
   let png = new PNG()
   png.readFile('./png.png', (res) => {
-    // console.log(res);
+    console.log(res);
     let idat = ''
-    // res.IDAT.colorData[1][0] = 33;
-    // res.IDAT.colorData[1][3] = 33;
-    // res.IDAT.colorData[1][6] = 33;
-    // res.IDAT.colorData[1][9] = 33;
-    // res.IDAT.colorData[1][12] = 33;
-    // res.IDAT.colorData[1][15] = 33;
-    // res.IDAT.colorData[1][18] = 33;
-    // res.IDAT.colorData[1][21] = 33;
-    // res.IDAT.colorData[1][24] = 33;
-    // res.IDAT.colorData[1][27] = 33;
-    // console.log(res.IDAT.colorData);
+    res.IDAT.colorData[1][0] = 33;
+    res.IDAT.colorData[1][3] = 33;
+    res.IDAT.colorData[1][6] = 33;
+    res.IDAT.colorData[1][9] = 33;
+    res.IDAT.colorData[1][12] = 33;
+    res.IDAT.colorData[1][15] = 33;
+    res.IDAT.colorData[1][18] = 33;
+    res.IDAT.colorData[1][21] = 33;
+    res.IDAT.colorData[1][24] = 33;
+    res.IDAT.colorData[1][27] = 33;
     idat = res.IDAT.colorData.map((v) => {
-      return Buffer.concat([Buffer.from(pngConst.newLine2)])
+      return Buffer.concat([Buffer.from([0x00]), Buffer.from(v).slice(0, 30)])
     })
-    idat[0] = Buffer.from(pngConst.newLine)
-    // console.log(idat);
     idat = idat.reduce((p, n) => {
       return Buffer.concat([p, n])
     })
-    const sdf = Buffer.from(pngConst.data);
-    zlib.inflate(sdf, (err, ress) => {
-      // console.log(ress);
-      zlib.deflate(ress, (s, f) => {
-        console.log(f);
-      })
+
+    zlib.deflate(idat, { level: 9 }, (err2, srcData) => {
       const bufidat = Buffer.from(pngConst.TYPE_IDAT)
-      console.log(sdf);
-      let crc = crc32(Buffer.concat([bufidat, sdf]));
-      // console.log([res.signature,
-      //   ...res.IHDR.len,
-      //   Buffer.from(pngConst.TYPE_IHDR),
-      //   ...res.IHDR.data,
-      //   ...res.IHDR.crc,
-      //   ...res.IDAT.len,
-      //   Buffer.from(pngConst.TYPE_IDAT),
-      //   ress,
-      //   crc,
-      //   ...res.IEND.len,
-      //   Buffer.from(pngConst.TYPE_IEND),
-      //   ...res.IEND.crc]);
+      let crc = crc32(Buffer.concat([bufidat, srcData]));
+
+
       fs.writeFile('./create_png.png', Buffer.concat([
         res.signature,
         ...res.IHDR.len,
         Buffer.from(pngConst.TYPE_IHDR),
         ...res.IHDR.data,
         ...res.IHDR.crc,
-        ...res.IDAT.len,
+        Buffer.from([0x00, 0x00, 0x00, 0x17]),
         Buffer.from(pngConst.TYPE_IDAT),
-        sdf,
+        srcData,
         Buffer.from(crc),
         ...res.IEND.len,
         Buffer.from(pngConst.TYPE_IEND),
@@ -90,4 +71,3 @@ ipcMain.on('saveImage', (event, file) => {
   })
   png.saveMin(`./min${times += 1}.png`)
 })
-

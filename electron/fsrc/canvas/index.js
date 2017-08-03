@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { ipcRenderer } from 'electron'
 import './style.styl'
 
+const imgSrc = 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAF0lEQVR42mP4jxcwKP7/jwcxENA9XKUBA/AiOBYNaxEAAAAASUVORK5CYII='
 class Canvas extends Component {
   constructor(params) {
     super(params)
@@ -16,12 +17,17 @@ class Canvas extends Component {
     reader.readAsBinaryString(target);
     readerCanvas.readAsDataURL(target);
 
+    // 把图片变成文件原生二进制格式，发送给后端node处理
     reader.onload = (file) => {
+      // 发送前，前端看看图片是数据
       console.log('图片的源码：');
       console.log(file.target.result);
-      let image = this.toAscii(file.target.result);
+      console.log(file);
+      let image = this.toUnicode(file.target.result);
       ipcRenderer.send('saveImage', image);
     }
+
+    // 把图片变成 base64，渲染到 canvas里
     readerCanvas.onload = (file) => {
       imgDom.src = file.target.result;
     }
@@ -33,7 +39,7 @@ class Canvas extends Component {
     let idat = ipcRenderer.sendSync('getPNGidat');
     console.log(idat);
   }
-  toAscii(src) {
+  toUnicode(src) {
     return Array.prototype.map.call(src, (i) => {
       return i.charCodeAt();
     })
@@ -47,6 +53,7 @@ class Canvas extends Component {
     return (
       <div>
         <canvas ref='canvas' className={cls}></canvas>
+        <img src={'data:img/png;base64,' + imgSrc} alt="" />
       </div>
     );
   }

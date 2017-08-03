@@ -30,5 +30,6 @@ CrcCalculator.prototype.write = function (data) {
 };
 
 CrcCalculator.prototype.crc32 = function () {
+  // return this._crc ^ (-1)
   return (this._crc ^ (-1)) >>> 0;
 };
