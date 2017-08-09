@@ -1,5 +1,5 @@
 const Buffer = require('Buffer').Buffer;
-var CrcCalculator = require('./png/crc');
+var CrcCalculator = require('./crc');
 
 function padStart(str, targetLengthSrc, padString) {
   let res;
@@ -52,13 +52,10 @@ function paethPredictor(left, above, upLeft) {
   }
   return upLeft;
 }
-function concat(...param) {
-  return Array.prototype.concat.apply(...param)
-}
+
 module.exports = {
   crc32,
   padStart,
   getByteWidth,
-  paethPredictor,
-  concat
+  paethPredictor
 }

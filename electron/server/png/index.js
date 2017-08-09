@@ -2,7 +2,7 @@ const Stream = require('stream');
 const fs = require('fs');
 const zlib = require('zlib');
 const pngConst = require('./const');
-const { getByteWidth, crc32, paethPredictor, concat } = require('../tool')
+const { getByteWidth, crc32, paethPredictor, concat } = require('./tool')
 
 class PNG extends Stream {
   constructor() {
@@ -25,7 +25,8 @@ class PNG extends Stream {
       signature: new Buffer(pngConst.PNG_SIGNATURE)
     }
   }
-  write(data, cb, encoding = this.encoding) {
+  //  把图片写入buffer
+  writeBuffer(data, cb, encoding = this.encoding) {
     let dataBuffer;
     if (Buffer.isBuffer(data)) {
       dataBuffer = data;
@@ -37,6 +38,7 @@ class PNG extends Stream {
     this.parseChunk();
     this.inflateData(this.pngChunks.IDAT.data, cb)
   }
+  // 获取图片各个参数
   getMetaData(chunk) {
     const buf = chunk.slice(8)
     let width = buf.readUInt32BE(0);
@@ -47,6 +49,7 @@ class PNG extends Stream {
     let xComparison = depth === 8 ? bpp : depth === 16 ? bpp * 2 : 1;
     this.metaData = { width, height, depth, colorType, bpp, xComparison };
   }
+  // 构建数据块
   buildChunk(signature) {
     const signatureChunk = this.pngChunks[signature];
     let i = 0
@@ -63,6 +66,7 @@ class PNG extends Stream {
     }
     return buf;
   }
+  // 解析（拆解）所有数据块
   parseChunk() {
     let buf = this.buffers.slice(8);
     this.bufferFragments.push(this.buffers.slice(0, 8));
@@ -74,7 +78,7 @@ class PNG extends Stream {
       let crc = '';
 
       let name = '';
-      for (let i = 4; i < 8; i++) {
+      for (let i = 4; i < 8; i += 1) {
         name += String.fromCharCode(buf[i]);
       }
       this.bufferFragments.push(buf.slice(0, length + 12))
@@ -85,9 +89,9 @@ class PNG extends Stream {
       data = data.slice(0, length)
       this.buffered -= length + 12;
       if (this.pngChunks[name]) {
-        this.pngChunks[name].data = concat(this.pngChunks[name].data, [data])
-        this.pngChunks[name].len = concat(this.pngChunks[name].len, [lenBuf])
-        this.pngChunks[name].crc = concat(this.pngChunks[name].crc, [crc])
+        this.pngChunks[name].data = [this.pngChunks[name].data].concat([data])
+        this.pngChunks[name].len = [this.pngChunks[name].len].concat([lenBuf])
+        this.pngChunks[name].crc = [this.pngChunks[name].crc].concat([crc])
         this.pngChunks[name].times += 1
       } else {
         this.pngChunks[name] = {}
@@ -98,6 +102,7 @@ class PNG extends Stream {
       }
     }
   }
+  // 解压滤镜算法
   reverseColorData(chunk) {
     const byteWidth = getByteWidth(this.metaData) + 1;
     let buf = chunk;
@@ -133,6 +138,7 @@ class PNG extends Stream {
     })
     this.pngChunks.IDAT.colorData = colorData
   }
+  // inflate解压 颜色数据块的数据
   inflateData(data, cb) {
     let allData = data.reduce((p, n) => {
       return Buffer.concat([p, n])
@@ -206,9 +212,6 @@ class PNG extends Stream {
       this.buildChunk('IDAT'),
       this.buildChunk('IEND')
     ])
-    // buf = Buffer.concat(this.bufferFragments)
-    // console.log(this.bufferFragments);
-    // console.log(buf);
     fs.writeFile(name, buf, (err) => {
       if (err) console.log(err);
     })
@@ -220,10 +223,10 @@ class PNG extends Stream {
           cb(err)
           return
         }
-        this.write(data, cb)
+        this.writeBuffer(data, cb)
       })
     } else {
-      this.write(src, cb)
+      this.writeBuffer(src, cb)
     }
   }
 }

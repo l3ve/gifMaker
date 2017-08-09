@@ -676,8 +676,6 @@ __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 
 
-var imgSrc = 'iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAF0lEQVR42mP4jxcwKP7/jwcxENA9XKUBA/AiOBYNaxEAAAAASUVORK5CYII=';
-
 var Canvas = function (_Component) {
   __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(Canvas, _Component);
 
@@ -694,6 +692,8 @@ var Canvas = function (_Component) {
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Canvas, [{
     key: 'data',
     value: function data(target) {
+      var _this2 = this;
+
       var imgDom = new Image();
       var ctx = this.refs.canvas.getContext('2d');
       var reader = new FileReader();
@@ -704,12 +704,10 @@ var Canvas = function (_Component) {
       // 把图片变成文件原生二进制格式，发送给后端node处理
       reader.onload = function (file) {
         // 发送前，前端看看图片是数据
-        console.log(file.target);
         console.log('图片的源码：');
-        // console.log(file.target.result);
-        // console.log(file);
-        // let image = this.toUnicode(file.target.result);
-        // ipcRenderer.send('compress', image);
+        console.log(file.target.result);
+        var image = _this2.toUnicode(file.target.result);
+        __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('compress', image);
       };
 
       // 把图片变成 base64，渲染到 canvas里
@@ -748,8 +746,7 @@ var Canvas = function (_Component) {
       return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('canvas', { ref: 'canvas', className: cls }),
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('img', { src: 'data:img/png;base64,' + imgSrc, alt: '' })
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('canvas', { ref: 'canvas', className: cls })
       );
     }
   }]);
