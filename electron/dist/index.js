@@ -687,15 +687,13 @@ var Canvas = function (_Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Canvas.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(Canvas)).call(this, params));
 
     _this.imageData = [];
-    _this.buildImage();
+    // this.buildImage()
     return _this;
   }
 
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Canvas, [{
     key: 'data',
     value: function data(target) {
-      var _this2 = this;
-
       var imgDom = new Image();
       var ctx = this.refs.canvas.getContext('2d');
       var reader = new FileReader();
@@ -706,11 +704,12 @@ var Canvas = function (_Component) {
       // 把图片变成文件原生二进制格式，发送给后端node处理
       reader.onload = function (file) {
         // 发送前，前端看看图片是数据
+        console.log(file.target);
         console.log('图片的源码：');
-        console.log(file.target.result);
-        console.log(file);
-        var image = _this2.toUnicode(file.target.result);
-        __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('compress', image);
+        // console.log(file.target.result);
+        // console.log(file);
+        // let image = this.toUnicode(file.target.result);
+        // ipcRenderer.send('compress', image);
       };
 
       // 把图片变成 base64，渲染到 canvas里
@@ -823,7 +822,7 @@ var Index = function (_Component) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__canvas__["a" /* default */], { cls: 'canvas', target: objImg }),
-        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement('input', { type: 'file', ref: 'fileInput', onChange: this.inputChange })
+        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement('input', { type: 'file', ref: 'fileInput', onChange: this.inputChange, multiple: true })
       );
     }
   }]);

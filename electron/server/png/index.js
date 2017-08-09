@@ -143,7 +143,7 @@ class PNG extends Stream {
         cb(this.pngChunks)
       } else {
         // console.log(res);
-        // this.reverseColorData(res)
+        this.reverseColorData(res)
         cb(this.pngChunks)
       }
     })

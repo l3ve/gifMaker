@@ -19,10 +19,9 @@ ipcMain.on('getCRC', (event, str) => {
 
 ipcMain.on('getPNGidat', (event) => {
   let png = new PNG()
-  console.log(123);
   png.readFile('./white.png', (res) => {
   // console.log(res);
-  // createPNG(res);
+  createPNG(res);
   })
   event.returnValue = 'res'
 })
@@ -32,7 +31,7 @@ ipcMain.on('compress', (event, file) => {
   var png = new PNG()
   png.readFile(buf, (res) => {
     console.log('=====================================');
-    // console.log(res);
+    console.log(res);
   })
   png.saveMin(`./min${times += 1}.png`)
 })
@@ -78,28 +77,3 @@ function createPNG(res) {
     ]), () => { })
   })
 }
-
- // const bufn = Buffer.concat([
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white),
-  //   Buffer.from(pngConst.white)
-  // ])
-  // const buff = Buffer.concat([
-  //   Buffer.from(pngConst.newLine),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2),
-  //   Buffer.from(pngConst.newLine2)
-  // ])

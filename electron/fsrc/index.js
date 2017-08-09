@@ -20,7 +20,7 @@ class Index extends Component {
     return (
       <div>
         <Canvas cls='canvas' target={objImg} />
-        <input type="file" ref='fileInput' onChange={this.inputChange} />
+        <input type="file" ref='fileInput' onChange={this.inputChange} multiple />
       </div >
     );
   }
