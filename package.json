@@ -2,5 +2,8 @@
   "scripts": {
     "dev": "cd electron && npm run dev",
     "app": "cd electron && npm run app"
+  },
+  "dependencies": {
+    "opencv": "^6.0.0"
   }
 }

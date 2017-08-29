@@ -1,22 +1,30 @@
-const cv = require('opencv')
-const GREEN = [0, 255, 0];
+#!/usr/bin/env node
+var cv = require('opencv');
+var request = require('request');
+var fs = require('fs');
+var tmpfile = '/tmp/tmpgile';
 
-cv.readImage('./js.png', (err, img) => {
-  if (err) throw err
-  if (img.width() < 1 || img.height() < 1) throw new Error('Image has no size');
-  console.log(img.contours);
-  let contours = img.contours();
-  let largestContourImg;
-  let largestArea = 0;
-  let largestAreaIndex;
-  largestContourImg = new cv.Matrix('252', '428');
+function detect(imgfile) {
+  cv.readImage(imgfile, function(err, im){
+    im.detectObject(cv.FACE_CASCADE, {}, function(err, faces){
+      for (var i=0;i<faces.length; i++){
+        var x = faces[i]
+        console.log('>>', x); //Will see something like: { x: 336, y: 1359, width: 42, height: 42 }
+        im.ellipse(x.x + x.width/2, x.y + x.height/2, x.width/2, x.height/2);
+      }
+      im.save('/tmp/test.jpg');
+    });
+  })
+}
 
-  for (let i = 0; i < contours.length; i += 1) {
-    if (contours.area(i) > largestArea) {
-      largestArea = contours.area(i);
-      largestAreaIndex = i;
-    }
-  }
-  largestContourImg.drawContour(contours, largestAreaIndex, GREEN, 1, 8, 0, [0, 0])
-  img.save('./newJs.jpg');
-})
+//Execute the process
+if(process.argv[2].indexOf('http') == 0) { //from http resource
+  var url = process.argv[2];
+  var req = request.get(url);
+  req.pipe(fs.createWriteStream(tmpfile));
+  req.on('end', function(){
+    detect(tmpfile);
+  });
+} else { //from localhost
+  detect(process.argv[2]);
+}
