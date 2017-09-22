@@ -1,7 +1,6 @@
 const { ipcMain } = require('electron');
 const fs = require('fs');
 const { crc32 } = require('./png/tool');
-const getPixels = require('get-pixels');
 const pngConst = require('./png/const');
 const zlib = require('zlib')
 

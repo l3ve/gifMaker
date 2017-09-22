@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "main": "main.js",
   "dependencies": {
-    "crc": "^3.4.4",
-    "electron-rebuild": "^1.5.11",
-    "get-pixels": "^3.3.0",
-    "opencv": "^6.0.0"
+    "electron-rebuild": "^1.5.11"
   },
   "scripts": {
     "app": "./node_modules/.bin/electron .",
