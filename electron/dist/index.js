@@ -684,69 +684,81 @@ var Canvas = function (_Component) {
 
     var _this = __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Canvas.__proto__ || __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_get_prototype_of___default()(Canvas)).call(this, params));
 
-    _this.imageData = [];
-    // this.buildImage()
+    _this.loop = function () {
+      var _this$state = _this.state,
+          width = _this$state.width,
+          height = _this$state.height;
+
+      _this.refs.canvas.getContext('2d').drawImage(_this.refs.video, 0, 0, width, height);
+      _this.i = requestAnimationFrame(_this.loop);
+    };
+
+    _this.state = {
+      video: {}
+    };
+    _this.width = 333;
+    _this.i = 0;
     return _this;
   }
 
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Canvas, [{
-    key: 'data',
-    value: function data(target) {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
       var _this2 = this;
 
-      var imgDom = new Image();
-      var ctx = this.refs.canvas.getContext('2d');
-      var reader = new FileReader();
-      var readerCanvas = new FileReader();
-      reader.readAsBinaryString(target);
-      readerCanvas.readAsDataURL(target);
+      var video = this.refs.video;
 
-      // 把图片变成文件原生二进制格式，发送给后端node处理
-      reader.onload = function (file) {
-        // 发送前，前端看看图片是数据
-        console.log('图片的源码：');
-        console.log(file.target.result);
-        var image = _this2.toUnicode(file.target.result);
-        __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].send('compress', image);
-      };
-
-      // 把图片变成 base64，渲染到 canvas里
-      readerCanvas.onload = function (file) {
-        imgDom.src = file.target.result;
-      };
-      imgDom.onload = function () {
-        ctx.drawImage(imgDom, 0, 0);
-      };
-    }
-  }, {
-    key: 'buildImage',
-    value: function buildImage() {
-      var idat = __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('getPNGidat');
-      console.log(idat);
-    }
-  }, {
-    key: 'toUnicode',
-    value: function toUnicode(src) {
-      return Array.prototype.map.call(src, function (i) {
-        return i.charCodeAt();
+      video.addEventListener('playing', function (res) {
+        _this2.loop();
       });
     }
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
+      var _this3 = this;
+
       var target = nextProps.target;
 
-      target && this.data(target);
+      var videoDom = this.refs.video;
+      videoDom.src = target.path;
+      videoDom.addEventListener('loadedmetadata', function (res) {
+        _this3.setState({
+          video: target,
+          width: _this3.width,
+          height: res.target.clientHeight / res.target.clientWidth * _this3.width
+        });
+      });
+    }
+  }, {
+    key: 'computeFrame',
+    value: function computeFrame() {
+      this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
+      var frame = this.ctx1.getImageData(0, 0, this.width, this.height);
+      var l = frame.data.length / 4;
+
+      for (var i = 0; i < l; i += 1) {
+        var r = frame.data[i * 4 + 0];
+        var g = frame.data[i * 4 + 1];
+        var b = frame.data[i * 4 + 2];
+        if (g > 100 && r > 100 && b < 43) {
+          frame.data[i * 4 + 3] = 0;
+        }
+      }
+      this.ctx2.putImageData(frame, 0, 0);
     }
   }, {
     key: 'render',
     value: function render() {
       var cls = this.props.cls;
+      var _state = this.state,
+          width = _state.width,
+          height = _state.height;
 
       return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('canvas', { ref: 'canvas', className: cls })
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('video', { width: width, autoPlay: true, ref: 'video' }),
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('canvas', { width: width, height: height, ref: 'canvas', className: 'canvas' })
       );
     }
   }]);
@@ -794,7 +806,7 @@ var Index = function (_Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Index.__proto__ || __WEBPACK_IMPORTED_MODULE_1_babel_runtime_core_js_object_get_prototype_of___default()(Index)).call(this, params));
 
     _this.state = {
-      objImg: {}
+      video: {}
     };
     _this.inputChange = _this.inputChange.bind(_this);
     return _this;
@@ -807,18 +819,18 @@ var Index = function (_Component) {
           file = _refs$fileInput$files[0];
 
       this.setState({
-        objImg: file
+        video: file
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      var objImg = this.state.objImg;
+      var video = this.state.video;
 
       return __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__canvas__["a" /* default */], { cls: 'canvas', target: objImg }),
+        __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7__canvas__["a" /* default */], { cls: 'canvas', target: video }),
         __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement('input', { type: 'file', ref: 'fileInput', onChange: this.inputChange, multiple: true })
       );
     }

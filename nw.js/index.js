@@ -126,7 +126,6 @@ zweiGif = (function () {
             height: newh
         });
     };
-
     return new Zweigif();
 })();
 

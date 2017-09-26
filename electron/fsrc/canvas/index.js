@@ -5,52 +5,55 @@ import './style.styl'
 class Canvas extends Component {
   constructor(params) {
     super(params)
-    this.imageData = []
-    // this.buildImage()
-  }
-  data(target) {
-    const imgDom = new Image();
-    const ctx = this.refs.canvas.getContext('2d');
-    const reader = new FileReader();
-    const readerCanvas = new FileReader();
-    reader.readAsBinaryString(target);
-    readerCanvas.readAsDataURL(target);
-
-    // 把图片变成文件原生二进制格式，发送给后端node处理
-    reader.onload = (file) => {
-      // 发送前，前端看看图片是数据
-      console.log('图片的源码：');
-      console.log(file.target.result);
-      let image = this.toUnicode(file.target.result);
-      ipcRenderer.send('compress', image);
+    this.state = {
+      video: {}
     }
-
-    // 把图片变成 base64，渲染到 canvas里
-    readerCanvas.onload = (file) => {
-      imgDom.src = file.target.result;
-    }
-    imgDom.onload = () => {
-      ctx.drawImage(imgDom, 0, 0);
-    }
+    this.width = 333
+    this.i = 0
   }
-  buildImage() {
-    let idat = ipcRenderer.sendSync('getPNGidat');
-    console.log(idat);
-  }
-  toUnicode(src) {
-    return Array.prototype.map.call(src, (i) => {
-      return i.charCodeAt();
+  componentDidMount() {
+    const { video } = this.refs
+    video.addEventListener('playing', (res) => {
+      this.loop()
     })
   }
   componentWillReceiveProps(nextProps) {
     const { target } = nextProps;
-    target && this.data(target)
+    const videoDom = this.refs.video;
+    videoDom.src = target.path
+    videoDom.addEventListener('loadedmetadata', (res) => {
+      this.setState({
+        video: target,
+        width: this.width,
+        height: (res.target.clientHeight / res.target.clientWidth) * this.width
+      });
+    })
+  }
+  loop = () => {
+    const { width, height } = this.state
+    this.refs.canvas.getContext('2d').drawImage(this.refs.video, 0, 0, width, height);
+    this.i = requestAnimationFrame(this.loop);
+  }
+  computeFrame() {
+    this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
+    let frame = this.ctx1.getImageData(0, 0, this.width, this.height);
+    let l = frame.data.length / 4;
+
+    for (let i = 0; i < l; i += 1) {
+      let r = frame.data[(i * 4) + 0];
+      let g = frame.data[(i * 4) + 1];
+      let b = frame.data[(i * 4) + 2];
+      if (g > 100 && r > 100 && b < 43) { frame.data[(i * 4) + 3] = 0; }
+    }
+    this.ctx2.putImageData(frame, 0, 0);
   }
   render() {
     const { cls } = this.props;
+    const { width, height } = this.state;
     return (
       <div>
-        <canvas ref='canvas' className={cls}></canvas>
+        <video width={width} autoPlay ref='video'></video>
+        <canvas width={width} height={height} ref='canvas' className='canvas'></canvas>
       </div>
     );
   }

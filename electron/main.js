@@ -18,7 +18,6 @@ function createWindow() {
   global.mainWindow.openDevTools();
   // 启用服务
   require('./server');
-  require('./opencv');
   console.log(`当前node版本 : ${process.version}`);
   global.mainWindow.on('closed', () => {
     global.mainWindow = null;

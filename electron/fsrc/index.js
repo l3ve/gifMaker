@@ -5,23 +5,23 @@ class Index extends Component {
   constructor(params) {
     super(params)
     this.state = {
-      objImg: {}
+      video: {}
     }
     this.inputChange = this.inputChange.bind(this);
   }
   inputChange() {
     const { files: [file] } = this.refs.fileInput;
     this.setState({
-      objImg: file
+      video: file
     });
   }
   render() {
-    const { objImg } = this.state;
+    const { video } = this.state;
     return (
       <div>
-        <Canvas cls='canvas' target={objImg} />
+        <Canvas cls='canvas' target={video} />
         <input type="file" ref='fileInput' onChange={this.inputChange} multiple />
-      </div >
+      </div>
     );
   }
 }
