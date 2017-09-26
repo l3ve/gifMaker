@@ -676,6 +676,8 @@ __WEBPACK_IMPORTED_MODULE_1_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 
 
+var WIDTH = 333;
+
 var Canvas = function (_Component) {
   __WEBPACK_IMPORTED_MODULE_4_babel_runtime_helpers_inherits___default()(Canvas, _Component);
 
@@ -689,62 +691,61 @@ var Canvas = function (_Component) {
           width = _this$state.width,
           height = _this$state.height;
 
-      _this.refs.canvas.getContext('2d').drawImage(_this.refs.video, 0, 0, width, height);
+      var canvas = _this.refs.canvas.getContext('2d');
+      canvas.drawImage(_this.refs.video, 0, 0, width, height);
       _this.i = requestAnimationFrame(_this.loop);
     };
 
-    _this.state = {
-      video: {}
+    _this.makePNG = function () {
+      var _this$state2 = _this.state,
+          width = _this$state2.width,
+          height = _this$state2.height;
+
+      var cvs = _this.refs.canvas.getContext('2d');
+      var pixels = cvs.getImageData(0, 0, width, height);
+      console.log(pixels);
+      var PNGbase64 = _this.refs.canvas.toDataURL();
+      _this.refs.image.src = PNGbase64;
     };
-    _this.width = 333;
-    _this.i = 0;
+
+    _this.state = {
+      video: {},
+      width: WIDTH,
+      height: 0
+    };
     return _this;
   }
 
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Canvas, [{
+    key: 'buildImage',
+    value: function buildImage() {
+      var idat = __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('getPNGidat');
+      console.log(idat);
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
 
       var video = this.refs.video;
 
-      video.addEventListener('playing', function (res) {
-        _this2.loop();
+      video.addEventListener('loadedmetadata', function (res) {
+        _this2.setState({
+          width: WIDTH,
+          height: res.target.clientHeight
+        }, function () {
+          _this2.loop();
+        });
       });
     }
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var _this3 = this;
-
       var target = nextProps.target;
 
-      var videoDom = this.refs.video;
-      videoDom.src = target.path;
-      videoDom.addEventListener('loadedmetadata', function (res) {
-        _this3.setState({
-          video: target,
-          width: _this3.width,
-          height: res.target.clientHeight / res.target.clientWidth * _this3.width
-        });
+      this.setState({
+        video: target
       });
-    }
-  }, {
-    key: 'computeFrame',
-    value: function computeFrame() {
-      this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-      var frame = this.ctx1.getImageData(0, 0, this.width, this.height);
-      var l = frame.data.length / 4;
-
-      for (var i = 0; i < l; i += 1) {
-        var r = frame.data[i * 4 + 0];
-        var g = frame.data[i * 4 + 1];
-        var b = frame.data[i * 4 + 2];
-        if (g > 100 && r > 100 && b < 43) {
-          frame.data[i * 4 + 3] = 0;
-        }
-      }
-      this.ctx2.putImageData(frame, 0, 0);
     }
   }, {
     key: 'render',
@@ -752,13 +753,20 @@ var Canvas = function (_Component) {
       var cls = this.props.cls;
       var _state = this.state,
           width = _state.width,
-          height = _state.height;
+          height = _state.height,
+          video = _state.video;
 
       return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
         'div',
         null,
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('video', { width: width, autoPlay: true, ref: 'video' }),
-        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('canvas', { width: width, height: height, ref: 'canvas', className: 'canvas' })
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('video', { width: WIDTH, src: video.path, autoPlay: true, ref: 'video' }),
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('canvas', { width: width, height: height, ref: 'canvas', className: 'canvas' }),
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('img', { ref: 'image' }),
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+          'div',
+          { className: __WEBPACK_IMPORTED_MODULE_7__style_styl___default.a.btn, onClick: this.makePNG },
+          'PNG'
+        )
       );
     }
   }]);
@@ -1558,6 +1566,7 @@ setToStringTag(global.JSON, 'JSON', true);
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+module.exports = {"btn":"style__btn___16RHl"};
 
 /***/ }),
 /* 75 */

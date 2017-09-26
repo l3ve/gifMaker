@@ -1,60 +1,63 @@
 import React, { Component } from 'react'
 import { ipcRenderer } from 'electron'
-import './style.styl'
+import className from './style.styl'
+
+const WIDTH = 333
 
 class Canvas extends Component {
   constructor(params) {
     super(params)
     this.state = {
-      video: {}
+      video: {},
+      width: WIDTH,
+      height: 0
     }
-    this.width = 333
-    this.i = 0
+  }
+  buildImage() {
+    let idat = ipcRenderer.sendSync('getPNGidat');
+    console.log(idat);
   }
   componentDidMount() {
     const { video } = this.refs
-    video.addEventListener('playing', (res) => {
-      this.loop()
+    video.addEventListener('loadedmetadata', (res) => {
+      this.setState({
+        width: WIDTH,
+        height: res.target.clientHeight
+      }, () => {
+        this.loop()
+      });
     })
   }
   componentWillReceiveProps(nextProps) {
     const { target } = nextProps;
-    const videoDom = this.refs.video;
-    videoDom.src = target.path
-    videoDom.addEventListener('loadedmetadata', (res) => {
-      this.setState({
-        video: target,
-        width: this.width,
-        height: (res.target.clientHeight / res.target.clientWidth) * this.width
-      });
-    })
+    this.setState({
+      video: target
+    });
   }
   loop = () => {
     const { width, height } = this.state
-    this.refs.canvas.getContext('2d').drawImage(this.refs.video, 0, 0, width, height);
+    const canvas = this.refs.canvas.getContext('2d')
+    canvas.drawImage(this.refs.video, 0, 0, width, height);
     this.i = requestAnimationFrame(this.loop);
   }
-  computeFrame() {
-    this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-    let frame = this.ctx1.getImageData(0, 0, this.width, this.height);
-    let l = frame.data.length / 4;
-
-    for (let i = 0; i < l; i += 1) {
-      let r = frame.data[(i * 4) + 0];
-      let g = frame.data[(i * 4) + 1];
-      let b = frame.data[(i * 4) + 2];
-      if (g > 100 && r > 100 && b < 43) { frame.data[(i * 4) + 3] = 0; }
-    }
-    this.ctx2.putImageData(frame, 0, 0);
+  makePNG = () => {
+    const { width, height } = this.state
+    const cvs = this.refs.canvas.getContext('2d')
+    let pixels = cvs.getImageData(0, 0, width, height);
+    console.log(pixels);
+    const PNGbase64 = this.refs.canvas.toDataURL()
+    this.refs.image.src = PNGbase64
   }
   render() {
     const { cls } = this.props;
-    const { width, height } = this.state;
+    const { width, height, video } = this.state
     return (
-      <div>
-        <video width={width} autoPlay ref='video'></video>
+      < div >
+        <video width={WIDTH} src={video.path} autoPlay ref='video'></video>
         <canvas width={width} height={height} ref='canvas' className='canvas'></canvas>
-      </div>
+        <img ref='image' />
+        <div className={className.btn} onClick={this.makePNG} >PNG</div>
+      </div >
     );
   }
 }

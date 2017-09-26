@@ -6,21 +6,12 @@ const zlib = require('zlib')
 
 const PNG = require('./png')
 let times = 0;
-ipcMain.on('getCRC', (event, str) => {
-  let str16 = str.split(' ').map((v) => {
-    // 根据unicode值 转换为字符串
-    return String.fromCharCode(v)
-  }).join('')
-  // crc 接受的是unicode字符串
-  let crc16 = crc32(str16);
-  event.returnValue = { crc16 }
-})
 
-ipcMain.on('getPNGidat', (event) => {
+ipcMain.on('makePNG', (event) => {
   let png = new PNG()
   png.readFile('./white.png', (res) => {
-  // console.log(res);
-  createPNG(res);
+    console.log(res);
+    createPNG(res);
   })
   event.returnValue = 'res'
 })
