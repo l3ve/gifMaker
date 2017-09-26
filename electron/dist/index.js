@@ -702,10 +702,10 @@ var Canvas = function (_Component) {
           height = _this$state2.height;
 
       var cvs = _this.refs.canvas.getContext('2d');
-      var pixels = cvs.getImageData(0, 0, width, height);
-      console.log(pixels);
       var PNGbase64 = _this.refs.canvas.toDataURL();
       _this.refs.image.src = PNGbase64;
+      var pixels = cvs.getImageData(0, 0, width, height);
+      console.log(__WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('makePNG', pixels.data, pixels.width, pixels.height));
     };
 
     _this.state = {
@@ -717,12 +717,6 @@ var Canvas = function (_Component) {
   }
 
   __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(Canvas, [{
-    key: 'buildImage',
-    value: function buildImage() {
-      var idat = __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('getPNGidat');
-      console.log(idat);
-    }
-  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;

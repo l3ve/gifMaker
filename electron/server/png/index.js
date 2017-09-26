@@ -229,6 +229,45 @@ class PNG extends Stream {
       this.writeBuffer(src, cb)
     }
   }
+  makeIHDR(w, h) {
+    const len = [0x00, 0x00, 0x00, 0x0d]
+    const ihdr = pngConst.TYPE_IHDR
+    const data = [0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10]
+    const dataEnd = [0x08, 0x02, 0x00, 0x00, 0x00, 0x00]
+    let crc = crc32(Buffer.concat([ihdr, data, dataEnd]))
+    return Buffer.concat([len, ihdr, data, dataEnd, crc])
+  }
+  makeIEND() {
+    const len = [0x00, 0x00, 0x00, 0x00]
+    const iend = pngConst.TYPE_IEND
+    const crc = [0xae, 0x42, 0x60, 0x82]
+    return Buffer.concat([len, iend, crc])
+  }
+  creatPNG({ data, width, height }, cb) {
+    let idat = ''
+    idat = data.map((v) => {
+      return Buffer.concat([Buffer.from([0x00]), Buffer.from(v)])
+    })
+    idat = idat.reduce((p, n) => {
+      return Buffer.concat([p, n])
+    })
+
+    zlib.deflate(idat, { level: 9 }, (err2, srcData) => {
+      const bufidat = Buffer.from(pngConst.TYPE_IDAT)
+      let crc = crc32(Buffer.concat([bufidat, srcData]));
+
+
+      fs.writeFile('./cut_png.png', Buffer.concat([
+        pngConst.PNG_SIGNATURE,
+        this.makeIHDR(width, height),
+        Buffer.from([0x00, 0x00, 0x00, 0x17]),
+        Buffer.from(pngConst.TYPE_IDAT),
+        srcData,
+        Buffer.from(crc),
+        this.makeIEND()
+      ]), () => { })
+    })
+  }
 }
 
 

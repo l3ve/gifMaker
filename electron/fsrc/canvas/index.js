@@ -13,10 +13,6 @@ class Canvas extends Component {
       height: 0
     }
   }
-  buildImage() {
-    let idat = ipcRenderer.sendSync('getPNGidat');
-    console.log(idat);
-  }
   componentDidMount() {
     const { video } = this.refs
     video.addEventListener('loadedmetadata', (res) => {
@@ -43,21 +39,21 @@ class Canvas extends Component {
   makePNG = () => {
     const { width, height } = this.state
     const cvs = this.refs.canvas.getContext('2d')
-    let pixels = cvs.getImageData(0, 0, width, height);
-    console.log(pixels);
     const PNGbase64 = this.refs.canvas.toDataURL()
     this.refs.image.src = PNGbase64
+    let pixels = cvs.getImageData(0, 0, width, height);
+    console.log(ipcRenderer.sendSync('makePNG', pixels.data, pixels.width, pixels.height))
   }
   render() {
     const { cls } = this.props;
     const { width, height, video } = this.state
     return (
-      < div >
+      <div>
         <video width={WIDTH} src={video.path} autoPlay ref='video'></video>
         <canvas width={width} height={height} ref='canvas' className='canvas'></canvas>
         <img ref='image' />
         <div className={className.btn} onClick={this.makePNG} >PNG</div>
-      </div >
+      </div>
     );
   }
 }
