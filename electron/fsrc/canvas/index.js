@@ -37,8 +37,8 @@ class Canvas extends Component {
     this.i = requestAnimationFrame(this.loop);
   }
   makePNG = () => {
-    const { width, height } = this.state
     const cvs = this.refs.canvas.getContext('2d')
+    const { width, height } = this.state
     const PNGbase64 = this.refs.canvas.toDataURL()
     this.refs.image.src = PNGbase64
     let imageData = cvs.getImageData(0, 0, width, height);
@@ -47,9 +47,14 @@ class Canvas extends Component {
     imageData.data.forEach((v) => {
       pixels.push(v)
     })
-    // console.log(Array.isArray(pixels));
-    console.log(pixels);
     ipcRenderer.sendSync('makePNG', pixels, imageData.width, imageData.height)
+    // this.setState({
+    //   width: this.refs.img.width,
+    //   height: this.refs.img.height
+    // }, () => {
+    //   cvs.drawImage(this.refs.img, 0, 0, width, height)
+    //   ipcRenderer.sendSync('parsePNG', this.state.video.path)
+    // });
   }
   render() {
     const { cls } = this.props;

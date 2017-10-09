@@ -697,11 +697,11 @@ var Canvas = function (_Component) {
     };
 
     _this.makePNG = function () {
+      var cvs = _this.refs.canvas.getContext('2d');
       var _this$state2 = _this.state,
           width = _this$state2.width,
           height = _this$state2.height;
 
-      var cvs = _this.refs.canvas.getContext('2d');
       var PNGbase64 = _this.refs.canvas.toDataURL();
       _this.refs.image.src = PNGbase64;
       var imageData = cvs.getImageData(0, 0, width, height);
@@ -710,9 +710,14 @@ var Canvas = function (_Component) {
       imageData.data.forEach(function (v) {
         pixels.push(v);
       });
-      // console.log(Array.isArray(pixels));
-      console.log(pixels);
       __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('makePNG', pixels, imageData.width, imageData.height);
+      // this.setState({
+      //   width: this.refs.img.width,
+      //   height: this.refs.img.height
+      // }, () => {
+      //   cvs.drawImage(this.refs.img, 0, 0, width, height)
+      //   ipcRenderer.sendSync('parsePNG', this.state.video.path)
+      // });
     };
 
     _this.state = {

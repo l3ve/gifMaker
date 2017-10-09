@@ -145,10 +145,8 @@ class PNG extends Stream {
     })
     zlib.inflate(allData, (err, res) => {
       if (err) {
-        console.log(err);
-        cb(this.pngChunks)
+        cb(this.pngChunks, err)
       } else {
-        // console.log(res);
         this.reverseColorData(res)
         cb(this.pngChunks)
       }
@@ -229,10 +227,15 @@ class PNG extends Stream {
       this.writeBuffer(src, cb)
     }
   }
+  fillZero(buf, len) {
+    let res = Buffer.alloc(len, 0);
+    res.writeIntBE(buf, 0, len)
+    return res
+  }
   makeIHDR(w, h) {
     const len = Buffer.from([0x00, 0x00, 0x00, 0x0d])
     const ihdr = Buffer.from(pngConst.TYPE_IHDR)
-    const data = Buffer.from([0x00, 0x00, 0x01, 0x4d, 0x00, 0x00, 0x00, 0xbb])
+    const data = Buffer.concat([this.fillZero(w, 4), this.fillZero(h, 4)])
     const dataEnd = Buffer.from([0x08, 0x06, 0x00, 0x00, 0x00])
     let crc = Buffer.from(crc32(Buffer.concat([ihdr, data, dataEnd])))
     return Buffer.concat([len, ihdr, data, dataEnd, crc])
@@ -244,12 +247,12 @@ class PNG extends Stream {
     return Buffer.concat([len, iend, crc])
   }
   makeImageData({ pixels, width, height }) {
-    let imageData = Buffer.from([0x00])
-    console.log(width, height);
+    let imageData = Buffer.from([0x00]);
+    const widthBty = width * 4
     console.time(1)
     imageData = pixels.reduce((p, n, i) => {
-      let temp;
-      if (i % (width * 4) === 0) {
+      let temp
+      if (i !== 0 && i % widthBty === 0) {
         temp = Buffer.concat([p, Buffer.from([0x00]), Buffer.from([n])])
       } else {
         temp = Buffer.concat([p, Buffer.from([n])])
@@ -266,7 +269,7 @@ class PNG extends Stream {
       fs.writeFile('./cut_png.png', Buffer.concat([
         Buffer.from(pngConst.PNG_SIGNATURE),
         this.makeIHDR(width, height),
-        Buffer.from([0x00, 0x00, 0x00, 0x17]),
+        this.fillZero(srcData.length, 4),
         bufidat,
         srcData,
         Buffer.from(crc),

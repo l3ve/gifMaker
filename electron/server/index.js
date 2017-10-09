@@ -13,6 +13,15 @@ ipcMain.on('makePNG', (event, pixels, width, height) => {
   event.returnValue = 'res'
 })
 
+
+ipcMain.on('parsePNG', (event, path) => {
+  let png = new PNG()
+  png.readFile(path, (res) => {
+    console.log(res);
+  })
+  event.returnValue = 'res'
+})
+
 function createPNG(res) {
 
 }
