@@ -710,7 +710,7 @@ var Canvas = function (_Component) {
       imageData.data.forEach(function (v) {
         pixels.push(v);
       });
-      __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('makePNG', pixels, imageData.width, imageData.height);
+      __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('makePNG', pixels, imageData.width, imageData.height, imageData.data);
       // this.setState({
       //   width: this.refs.img.width,
       //   height: this.refs.img.height

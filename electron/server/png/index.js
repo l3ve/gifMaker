@@ -247,23 +247,21 @@ class PNG extends Stream {
     return Buffer.concat([len, iend, crc])
   }
   makeImageData({ pixels, width, height }) {
-    let imageData = Buffer.from([0x00]);
+    let imageData = []
     const widthBty = width * 4
     console.time(1)
-    imageData = pixels.reduce((p, n, i) => {
+    pixels.forEach((n, i) => {
       let temp
-      if (i !== 0 && i % widthBty === 0) {
-        temp = Buffer.concat([p, Buffer.from([0x00]), Buffer.from([n])])
-      } else {
-        temp = Buffer.concat([p, Buffer.from([n])])
+      if (i % widthBty === 0) {
+        imageData.push(0x00)
       }
-      return temp
-    }, imageData)
+      imageData.push(n)
+    })
     console.timeEnd(1)
-    return imageData;
+    return Buffer.from(imageData);
   }
-  creatPNG({ pixels, width, height }, cb) {
-    zlib.deflate(this.makeImageData({ pixels, width, height }), { level: 9 }, (err2, srcData) => {
+  creatPNG({ pixels, width, height, image }, cb) {
+    zlib.deflate(this.makeImageData({ pixels, width, height, image }), { level: 9 }, (err2, srcData) => {
       const bufidat = Buffer.from(pngConst.TYPE_IDAT)
       let crc = crc32(Buffer.concat([bufidat, srcData]));
       fs.writeFile('./cut_png.png', Buffer.concat([

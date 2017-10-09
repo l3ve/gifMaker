@@ -47,7 +47,7 @@ class Canvas extends Component {
     imageData.data.forEach((v) => {
       pixels.push(v)
     })
-    ipcRenderer.sendSync('makePNG', pixels, imageData.width, imageData.height)
+    ipcRenderer.sendSync('makePNG', pixels, imageData.width, imageData.height, imageData.data)
     // this.setState({
     //   width: this.refs.img.width,
     //   height: this.refs.img.height
