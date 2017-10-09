@@ -704,8 +704,15 @@ var Canvas = function (_Component) {
       var cvs = _this.refs.canvas.getContext('2d');
       var PNGbase64 = _this.refs.canvas.toDataURL();
       _this.refs.image.src = PNGbase64;
-      var pixels = cvs.getImageData(0, 0, width, height);
-      console.log(__WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('makePNG', pixels.data, pixels.width, pixels.height));
+      var imageData = cvs.getImageData(0, 0, width, height);
+      // 把 Uint8ClampedArray 转换成 Array
+      var pixels = [];
+      imageData.data.forEach(function (v) {
+        pixels.push(v);
+      });
+      // console.log(Array.isArray(pixels));
+      console.log(pixels);
+      __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('makePNG', pixels, imageData.width, imageData.height);
     };
 
     _this.state = {

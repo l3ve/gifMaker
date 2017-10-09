@@ -230,38 +230,44 @@ class PNG extends Stream {
     }
   }
   makeIHDR(w, h) {
-    const len = [0x00, 0x00, 0x00, 0x0d]
-    const ihdr = pngConst.TYPE_IHDR
-    const data = [0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10]
-    const dataEnd = [0x08, 0x02, 0x00, 0x00, 0x00, 0x00]
-    let crc = crc32(Buffer.concat([ihdr, data, dataEnd]))
+    const len = Buffer.from([0x00, 0x00, 0x00, 0x0d])
+    const ihdr = Buffer.from(pngConst.TYPE_IHDR)
+    const data = Buffer.from([0x00, 0x00, 0x01, 0x4d, 0x00, 0x00, 0x00, 0xbb])
+    const dataEnd = Buffer.from([0x08, 0x06, 0x00, 0x00, 0x00])
+    let crc = Buffer.from(crc32(Buffer.concat([ihdr, data, dataEnd])))
     return Buffer.concat([len, ihdr, data, dataEnd, crc])
   }
   makeIEND() {
-    const len = [0x00, 0x00, 0x00, 0x00]
-    const iend = pngConst.TYPE_IEND
-    const crc = [0xae, 0x42, 0x60, 0x82]
+    const len = Buffer.from([0x00, 0x00, 0x00, 0x00])
+    const iend = Buffer.from(pngConst.TYPE_IEND)
+    const crc = Buffer.from([0xae, 0x42, 0x60, 0x82])
     return Buffer.concat([len, iend, crc])
   }
-  creatPNG({ data, width, height }, cb) {
-    let idat = ''
-    idat = data.map((v) => {
-      return Buffer.concat([Buffer.from([0x00]), Buffer.from(v)])
-    })
-    idat = idat.reduce((p, n) => {
-      return Buffer.concat([p, n])
-    })
-
-    zlib.deflate(idat, { level: 9 }, (err2, srcData) => {
+  makeImageData({ pixels, width, height }) {
+    let imageData = Buffer.from([0x00])
+    console.log(width, height);
+    console.time(1)
+    imageData = pixels.reduce((p, n, i) => {
+      let temp;
+      if (i % (width * 4) === 0) {
+        temp = Buffer.concat([p, Buffer.from([0x00]), Buffer.from([n])])
+      } else {
+        temp = Buffer.concat([p, Buffer.from([n])])
+      }
+      return temp
+    }, imageData)
+    console.timeEnd(1)
+    return imageData;
+  }
+  creatPNG({ pixels, width, height }, cb) {
+    zlib.deflate(this.makeImageData({ pixels, width, height }), { level: 9 }, (err2, srcData) => {
       const bufidat = Buffer.from(pngConst.TYPE_IDAT)
       let crc = crc32(Buffer.concat([bufidat, srcData]));
-
-
       fs.writeFile('./cut_png.png', Buffer.concat([
-        pngConst.PNG_SIGNATURE,
+        Buffer.from(pngConst.PNG_SIGNATURE),
         this.makeIHDR(width, height),
         Buffer.from([0x00, 0x00, 0x00, 0x17]),
-        Buffer.from(pngConst.TYPE_IDAT),
+        bufidat,
         srcData,
         Buffer.from(crc),
         this.makeIEND()

@@ -41,8 +41,15 @@ class Canvas extends Component {
     const cvs = this.refs.canvas.getContext('2d')
     const PNGbase64 = this.refs.canvas.toDataURL()
     this.refs.image.src = PNGbase64
-    let pixels = cvs.getImageData(0, 0, width, height);
-    console.log(ipcRenderer.sendSync('makePNG', pixels.data, pixels.width, pixels.height))
+    let imageData = cvs.getImageData(0, 0, width, height);
+    // 把 Uint8ClampedArray 转换成 Array
+    let pixels = []
+    imageData.data.forEach((v) => {
+      pixels.push(v)
+    })
+    // console.log(Array.isArray(pixels));
+    console.log(pixels);
+    ipcRenderer.sendSync('makePNG', pixels, imageData.width, imageData.height)
   }
   render() {
     const { cls } = this.props;
