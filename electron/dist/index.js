@@ -711,13 +711,6 @@ var Canvas = function (_Component) {
         pixels.push(v);
       });
       __WEBPACK_IMPORTED_MODULE_6_electron__["ipcRenderer"].sendSync('makePNG', pixels, imageData.width, imageData.height, imageData.data);
-      // this.setState({
-      //   width: this.refs.img.width,
-      //   height: this.refs.img.height
-      // }, () => {
-      //   cvs.drawImage(this.refs.img, 0, 0, width, height)
-      //   ipcRenderer.sendSync('parsePNG', this.state.video.path)
-      // });
     };
 
     _this.state = {

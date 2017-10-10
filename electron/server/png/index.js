@@ -2,7 +2,7 @@ const Stream = require('stream');
 const fs = require('fs');
 const zlib = require('zlib');
 const pngConst = require('./const');
-const { getByteWidth, crc32, paethPredictor, concat } = require('./tool')
+const { getByteWidth, crc32, paethPredictor } = require('./tool')
 
 class PNG extends Stream {
   constructor() {
@@ -25,7 +25,7 @@ class PNG extends Stream {
       signature: new Buffer(pngConst.PNG_SIGNATURE)
     }
   }
-  //  把图片写入buffer
+  //  把图片数据写入 buffer
   writeBuffer(data, cb, encoding = this.encoding) {
     let dataBuffer;
     if (Buffer.isBuffer(data)) {
@@ -152,6 +152,7 @@ class PNG extends Stream {
       }
     })
   }
+  // 滤镜算法 1-4
   unFilterType1(rawData, lastLine, byteWidth) {
     const { xComparison } = this.metaData;
     let xBiggerThan = xComparison - 1;
@@ -249,7 +250,6 @@ class PNG extends Stream {
   makeImageData({ pixels, width, height }) {
     let imageData = []
     const widthBty = width * 4
-    console.time(1)
     pixels.forEach((n, i) => {
       let temp
       if (i % widthBty === 0) {
@@ -257,11 +257,10 @@ class PNG extends Stream {
       }
       imageData.push(n)
     })
-    console.timeEnd(1)
     return Buffer.from(imageData);
   }
-  creatPNG({ pixels, width, height, image }, cb) {
-    zlib.deflate(this.makeImageData({ pixels, width, height, image }), { level: 9 }, (err2, srcData) => {
+  creatPNG({ pixels, width, height }, cb) {
+    zlib.deflate(this.makeImageData({ pixels, width, height }), { level: 9 }, (err2, srcData) => {
       const bufidat = Buffer.from(pngConst.TYPE_IDAT)
       let crc = crc32(Buffer.concat([bufidat, srcData]));
       fs.writeFile('./cut_png.png', Buffer.concat([

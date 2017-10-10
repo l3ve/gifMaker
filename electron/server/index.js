@@ -7,9 +7,9 @@ const zlib = require('zlib')
 const PNG = require('./png')
 let times = 0;
 
-ipcMain.on('makePNG', (event, pixels, width, height, image) => {
+ipcMain.on('makePNG', (event, pixels, width, height) => {
   let png = new PNG()
-  png.creatPNG({ pixels, width, height, image }, () => { })
+  png.creatPNG({ pixels, width, height }, () => { })
   event.returnValue = 'res'
 })
 
@@ -21,7 +21,3 @@ ipcMain.on('parsePNG', (event, path) => {
   })
   event.returnValue = 'res'
 })
-
-function createPNG(res) {
-
-}
