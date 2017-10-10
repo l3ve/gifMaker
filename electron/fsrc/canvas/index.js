@@ -23,6 +23,9 @@ class Canvas extends Component {
         this.loop()
       });
     })
+    ipcRenderer.on('makePNG', (event, arg) => {
+      console.log('创建 PNG 成功', arg);
+    })
   }
   componentWillReceiveProps(nextProps) {
     const { target } = nextProps;
@@ -47,7 +50,7 @@ class Canvas extends Component {
     imageData.data.forEach((v) => {
       pixels.push(v)
     })
-    ipcRenderer.sendSync('makePNG', pixels, imageData.width, imageData.height, imageData.data)
+    ipcRenderer.send('makePNG', pixels, imageData.width, imageData.height)
   }
   render() {
     const { cls } = this.props;

@@ -138,7 +138,7 @@ class PNG extends Stream {
     })
     this.pngChunks.IDAT.colorData = colorData
   }
-  // inflate解压 颜色数据块的数据
+  // inflate 解压，颜色数据块的数据
   inflateData(data, cb) {
     let allData = data.reduce((p, n) => {
       return Buffer.concat([p, n])
@@ -271,7 +271,9 @@ class PNG extends Stream {
         srcData,
         Buffer.from(crc),
         this.makeIEND()
-      ]), () => { })
+      ]), (res) => {
+        cb(res)
+      })
     })
   }
 }

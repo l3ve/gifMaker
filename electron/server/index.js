@@ -9,8 +9,9 @@ let times = 0;
 
 ipcMain.on('makePNG', (event, pixels, width, height) => {
   let png = new PNG()
-  png.creatPNG({ pixels, width, height }, () => { })
-  event.returnValue = 'res'
+  png.creatPNG({ pixels, width, height }, (res) => {
+    event.sender.send('makePNG', res)
+  })
 })
 
 
