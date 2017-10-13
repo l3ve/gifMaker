@@ -3,9 +3,11 @@
 视频中截图，导出png和gif
 
 TODO :
-1. <del>解构png数据结构</del>
+1. <del>解构png数据结构，用video生成png图片</del>
 2. 解构gif数据结构
-3. 迁移旧版本（nw版本）到electron上
+3. 用webassembly提升效率
+
+
 
 # gifMaker
 在zweiCanvas里有简单功能的展示,录制事件从点击播放(play)到点击暂停(stop)
