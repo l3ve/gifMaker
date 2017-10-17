@@ -5,8 +5,10 @@ const pngConst = require('./png/const');
 const zlib = require('zlib')
 
 const PNG = require('./png')
-let times = 0;
+const GIF = require('./gif')
 
+let times = 0;
+let gif = new GIF()
 ipcMain.on('makePNG', (event, pixels, width, height) => {
   let png = new PNG()
   png.creatPNG({ pixels, width, height }, (res) => {
