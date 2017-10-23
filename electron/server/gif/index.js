@@ -1,11 +1,13 @@
 const fs = require('fs');
 const zlib = require('zlib');
 const gifConst = require('./const');
+const { LZW } = require('./tool');
 
 class GIF {
   constructor() {
     this.encoding = 'utf8'
     this.initData()
+    console.log(LZW);
   }
   initData() {
     this.bufferFragments = []
@@ -14,11 +16,11 @@ class GIF {
       Buffer.from(gifConst.LSD),
       Buffer.from(gifConst.GCT),
 
-      Buffer.from(gifConst.FUCK),
+      Buffer.from(gifConst.GCE),
       Buffer.from(gifConst.ID),
       Buffer.from(gifConst.IMAGEDATA),
 
-      Buffer.from(gifConst.FUCK2),
+      Buffer.from(gifConst.GCE),
       Buffer.from(gifConst.ID),
       Buffer.from(gifConst.FUCK4),
 
