@@ -34,8 +34,8 @@ function LZW(s, f) {
   if (!f) g();
   return out.join('');
 }
-// 压缩时：xcode('watchwatch....');
-// 解压时：xcode('compressed string',true);//第二个参数传true表示解压，反之为压缩
+// 压缩时：LZW('watchwatch....');
+// 解压时：LZW('compressed string',true);//第二个参数传true表示解压，反之为压缩
 module.exports = {
   LZW
 }

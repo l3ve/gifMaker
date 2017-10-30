@@ -6,12 +6,7 @@ const { LZW } = require('./tool');
 class GIF {
   constructor() {
     this.encoding = 'utf8'
-    this.initData()
-    console.log(LZW);
-  }
-  initData() {
-    this.bufferFragments = []
-    fs.writeFile('./gif.gif', Buffer.concat([
+    this.gifData = Buffer.concat([
       Buffer.from(gifConst.GIF_SIGNATURE),
       Buffer.from(gifConst.LSD),
       Buffer.from(gifConst.GCT),
@@ -25,8 +20,15 @@ class GIF {
       Buffer.from(gifConst.FUCK4),
 
       Buffer.from(gifConst.END)
-    ]), (res) => {
-      console.log(res);
+    ])
+    this.initData(this.gifData)
+    const _d = Buffer.from(gifConst.IMAGEDATA).toString('utf8')
+    console.log(_d);
+    console.log(LZW(_d, true));
+  }
+  initData(gifData) {
+    this.bufferFragments = []
+    fs.writeFile('./gif.gif', gifData, (res) => {
     })
   }
 }
