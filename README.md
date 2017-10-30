@@ -1,10 +1,10 @@
 # electron 衍生
 
-视频中截图，导出png和gif
+视频中截图，导出png和gif（暂且立牌留坑）
 
 TODO :
 1. <del>解构png数据结构，用video生成png图片</del>
-2. 解构gif数据结构
+2. 解构gif数据结构-卡在LZW压缩
 3. 用webassembly提升效率
 
 
