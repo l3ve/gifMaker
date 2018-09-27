@@ -1,3 +1,21 @@
+
+```cmd
+  // 压缩wasm的大小
+  wasm-gc main.wasm gc-mian.wasm
+```
+
+
+```cmd
+
+cargo new wams-rust --lib
+
+cargo build --target wasm32-unknown-unknown
+
+wasm-bindgen target/wasm32-unknown-unknown/debug/xxxx.wasm --out-dir .
+
+```
+
+
 # electron 衍生
 
 视频中截图，导出png和gif（暂且立牌留坑）
