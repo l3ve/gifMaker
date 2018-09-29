@@ -1,12 +1,13 @@
 {
-  "name": "gif-maker",
+  "name": "gif_maker",
   "version": "0.3.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "app": "electron .",
     "serve": "webpack-dev-server",
+    "build": "webpack --watch",
     "wasm": "cargo build --target wasm32-unknown-unknown",
-    "bindgen": "wasm-bindgen target/wasm32-unknown-unknown/debug/wasm_rust.wasm --out-dir ."
+    "bindgen": "wasm-bindgen target/wasm32-unknown-unknown/debug/gif_maker.wasm --out-dir ."
   },
   "devDependencies": {
     "electron": "^3.0.1",
