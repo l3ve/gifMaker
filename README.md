@@ -25,6 +25,7 @@ TODO :
 2. 解构gif数据结构-卡在LZW压缩
 3. 用webassembly提升效率
 
+[gif wiki](https://www.w3.org/Graphics/GIF/spec-gif89a.txt)
 
 
 # gifMaker
