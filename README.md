@@ -26,7 +26,7 @@ TODO :
 3. 用webassembly提升效率
 
 [gif wiki](https://www.w3.org/Graphics/GIF/spec-gif89a.txt)
-
+[jpeg wiki](http://twins.ee.nctu.edu.tw/courses/soclab_04/lab_hw_pdf/proj1_jpeg_introduction.pdf)
 
 # gifMaker
 在zweiCanvas里有简单功能的展示,录制事件从点击播放(play)到点击暂停(stop)
