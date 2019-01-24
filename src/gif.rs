@@ -148,7 +148,7 @@ impl Gif {
     }
     fn chuck_ce(&mut self) {
         println!("Comment Extension");
-        let mut length: Vec<u8> = self.buffer.drain(..1).collect();
+        let length: Vec<u8> = self.buffer.drain(..1).collect();
         let _ce_data: Vec<u8> = self.buffer.drain(..(length[0] as usize)).collect();
         let _block_terminator: Vec<u8> = self.buffer.drain(..1).collect();
     }
@@ -239,7 +239,7 @@ fn create_gif(w: u16, h: u16) -> Result<()> {
     let mut f = File::create("l3ve.gif")?;
     let mut data = HEADER.to_vec();
     let mut logical_screen_descriptor = build_logical_screen_descriptor(w, h);
-    let mut global_image_data = build_global_image_data();
+    // let mut global_image_data = build_global_image_data();
     let mut graphic_control_extension = build_graphic_control_extension(64);
     let mut image_descriptor = build_image_descriptor(w, h);
     let mut based_image_data = build_based_image_data(
@@ -252,7 +252,7 @@ fn create_gif(w: u16, h: u16) -> Result<()> {
     let mut based_image_data_2 =
         build_based_image_data(4, vec![240, 201, 73, 171, 189, 56, 235, 205, 123, 142]);
     data.append(&mut logical_screen_descriptor);
-    data.append(&mut global_image_data);
+    // data.append(&mut global_image_data);
     data.append(&mut graphic_control_extension.clone());
     data.append(&mut image_descriptor.clone());
     data.append(&mut based_image_data);
@@ -265,35 +265,61 @@ fn create_gif(w: u16, h: u16) -> Result<()> {
     f.sync_all()?;
     Ok(())
 }
-fn build_logical_screen_descriptor(w: u16, h: u16, l: u16) -> Vec<u8> {
+fn build_logical_screen_descriptor(w: u16, h: u16) -> Vec<u8> {
     let mut logical_screen_descriptor = vec![];
     let mut _w = decimal_to_u16_buffer(w);
     let mut _h = decimal_to_u16_buffer(h);
     logical_screen_descriptor.append(&mut _w);
     logical_screen_descriptor.append(&mut _h);
-    logical_screen_descriptor.append(&mut vec![binary_to_decimal(String::from("11110011"))]);
+    // 1.Global Color Table Flag              0 or 1
+    // 2.Color Resolution                     3 bits  rgba 8位
+    // 3.Sort Flag                            0 or 1
+    // 4.Size of Global Color Table           3 bits
+    logical_screen_descriptor.append(&mut vec![binary_to_decimal(String::from("01110000"))]);
     logical_screen_descriptor.append(&mut vec![0]);
     logical_screen_descriptor.append(&mut vec![0]);
     return logical_screen_descriptor;
 }
 fn build_graphic_control_extension(delay_time: u16) -> Vec<u8> {
     let mut graphic_control_extension = vec![0x21, 0xf9, 0x4];
-    graphic_control_extension.append(&mut vec![0x9]);
+    // 0.Reserved                    保留
+    // 1.Disposal Method             3 bits
+    //                    0 -   No disposal specified. The decoder is
+    //                          not required to take any action.
+    //                    1 -   Do not dispose. The graphic is to be left
+    //                          in place.
+    //                    2 -   Restore to background color. The area used by the
+    //                          graphic must be restored to the background color.
+    //                    3 -   Restore to previous. The decoder is required to
+    //                          restore the area overwritten by the graphic with
+    //                          what was there prior to rendering the graphic.
+    //                    4-7 - To be defined.
+    // 2.User Input Flag             0 or 1
+    // 3.Transparency Flag           0 or 1
+    graphic_control_extension.append(&mut vec![binary_to_decimal(String::from("00000100"))]);
     let mut _delay_time = decimal_to_u16_buffer(delay_time);
     graphic_control_extension.append(&mut _delay_time);
-    graphic_control_extension.append(&mut vec![0x0f]);
+    graphic_control_extension.append(&mut vec![0x00]);
     // 终结符
     graphic_control_extension.append(&mut vec![0]);
     return graphic_control_extension;
 }
-fn build_image_descriptor(w: u16, h: u16) -> Vec<u8> {
+fn build_image_descriptor(w: u16, h: u16, l: u8) -> Vec<u8> {
     let mut image_descriptor = vec![0x2c];
+    // left top
     image_descriptor.append(&mut vec![0, 0, 0, 0]);
     let mut _w = decimal_to_u16_buffer(w);
     let mut _h = decimal_to_u16_buffer(h);
     image_descriptor.append(&mut _w);
     image_descriptor.append(&mut _h);
-    image_descriptor.append(&mut vec![0]);
+    // 1.Local Color Table Flag            0 or 1
+    // 2.Interlace Flag                    0 or 1
+    // 3.Sort Flag                         0 or 1
+    // 4.Reserved                          2 bits
+    // 5.Size of Local Color Table         3 bits
+    let mut packed_fields = String::from("10000");
+    packed_fields.push_str("111");
+    image_descriptor.append(&mut vec![binary_to_decimal(packed_fields)]);
     return image_descriptor;
 }
 fn build_based_image_data(lzw: u8, mut data: Vec<u8>) -> Vec<u8> {
@@ -304,7 +330,7 @@ fn build_based_image_data(lzw: u8, mut data: Vec<u8>) -> Vec<u8> {
     return based_image_data;
 }
 fn build_global_image_data() -> Vec<u8> {
-    let mut global_image_data: Vec<u8> = vec![
+    let global_image_data: Vec<u8> = vec![
         0, 0, 0, 128, 0, 0, 0, 128, 0, 128, 128, 0, 0, 0, 128, 128, 0, 128, 0, 128, 128, 192, 192,
         192, 128, 128, 128, 255, 0, 0, 0, 255, 0, 255, 255, 0, 0, 0, 255, 255, 0, 255, 0, 255, 255,
         255, 255, 255,
