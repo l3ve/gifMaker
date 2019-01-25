@@ -227,7 +227,7 @@ impl Gif {
 
 pub fn new(url: &str) {
     let data_buffer: Vec<u8> = get_image_buffer(url).unwrap();
-    println!("{:?}", data_buffer);
+    // println!("{:?}", data_buffer);
     let mut gif = Gif::new(data_buffer);
     gif.analysis();
     let _aaa = create_gif(10, 10);
@@ -238,21 +238,38 @@ pub fn new(url: &str) {
 fn create_gif(w: u16, h: u16) -> Result<()> {
     let mut f = File::create("l3ve.gif")?;
     let mut data = HEADER.to_vec();
-    let mut logical_screen_descriptor = build_logical_screen_descriptor(w, h);
-    // let mut global_image_data = build_global_image_data();
+    let mut logical_screen_descriptor = build_logical_screen_descriptor(w, h, true);
+    let mut global_color_table = build_color_table();
     let mut graphic_control_extension = build_graphic_control_extension(64);
-    let mut image_descriptor = build_image_descriptor(w, h);
+    let mut image_descriptor = build_image_descriptor(w, h, false);
+    // let mut local_color_table = build_color_table();
+
     let mut based_image_data = build_based_image_data(
         4,
-        vec![
-            16, 128, 71, 43, 5, 73, 218, 155, 186, 174, 88, 231, 77, 79, 40, 142, 230, 41, 165, 25,
-            105, 126, 28, 12, 146, 219, 19, 1,
-        ],
+        lzw_encode(
+            &vec![
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            ],
+            4,
+        ),
     );
-    let mut based_image_data_2 =
-        build_based_image_data(4, vec![240, 201, 73, 171, 189, 56, 235, 205, 123, 142]);
+    let mut based_image_data_2 = build_based_image_data(
+        4,
+        lzw_encode(
+            &vec![
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 , 0, 0, 0, 0, 0, 0,0 , 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 , 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,0 , 0, 0, 0, 0, 0, 0, 0,
+           ],
+            4,
+        ),
+    );
     data.append(&mut logical_screen_descriptor);
-    // data.append(&mut global_image_data);
+    data.append(&mut global_color_table);
     data.append(&mut graphic_control_extension.clone());
     data.append(&mut image_descriptor.clone());
     data.append(&mut based_image_data);
@@ -260,12 +277,12 @@ fn create_gif(w: u16, h: u16) -> Result<()> {
     data.append(&mut image_descriptor);
     data.append(&mut based_image_data_2);
     data.append(&mut vec![59]);
-    println!("{:?}", data);
+    // println!("{:?}", data);
     f.write_all(&data)?;
     f.sync_all()?;
     Ok(())
 }
-fn build_logical_screen_descriptor(w: u16, h: u16) -> Vec<u8> {
+fn build_logical_screen_descriptor(w: u16, h: u16, b_gct: bool) -> Vec<u8> {
     let mut logical_screen_descriptor = vec![];
     let mut _w = decimal_to_u16_buffer(w);
     let mut _h = decimal_to_u16_buffer(h);
@@ -275,7 +292,19 @@ fn build_logical_screen_descriptor(w: u16, h: u16) -> Vec<u8> {
     // 2.Color Resolution                     3 bits  rgba 8位
     // 3.Sort Flag                            0 or 1
     // 4.Size of Global Color Table           3 bits
-    logical_screen_descriptor.append(&mut vec![binary_to_decimal(String::from("01110000"))]);
+    let mut packed_fields = String::new();
+    if b_gct {
+        packed_fields.push_str("1");
+    } else {
+        packed_fields.push_str("0");
+    }
+    packed_fields.push_str("1110");
+    if b_gct {
+        packed_fields.push_str("000");
+    } else {
+        packed_fields.push_str("000");
+    }
+    logical_screen_descriptor.append(&mut vec![binary_to_decimal(packed_fields)]);
     logical_screen_descriptor.append(&mut vec![0]);
     logical_screen_descriptor.append(&mut vec![0]);
     return logical_screen_descriptor;
@@ -304,7 +333,7 @@ fn build_graphic_control_extension(delay_time: u16) -> Vec<u8> {
     graphic_control_extension.append(&mut vec![0]);
     return graphic_control_extension;
 }
-fn build_image_descriptor(w: u16, h: u16, l: u8) -> Vec<u8> {
+fn build_image_descriptor(w: u16, h: u16, b_lgt: bool) -> Vec<u8> {
     let mut image_descriptor = vec![0x2c];
     // left top
     image_descriptor.append(&mut vec![0, 0, 0, 0]);
@@ -317,8 +346,18 @@ fn build_image_descriptor(w: u16, h: u16, l: u8) -> Vec<u8> {
     // 3.Sort Flag                         0 or 1
     // 4.Reserved                          2 bits
     // 5.Size of Local Color Table         3 bits
-    let mut packed_fields = String::from("10000");
-    packed_fields.push_str("111");
+    let mut packed_fields = String::new();
+    if b_lgt {
+        packed_fields.push_str("1");
+    } else {
+        packed_fields.push_str("0");
+    }
+    packed_fields.push_str("0000");
+    if b_lgt {
+        packed_fields.push_str("000");
+    } else {
+        packed_fields.push_str("000");
+    }
     image_descriptor.append(&mut vec![binary_to_decimal(packed_fields)]);
     return image_descriptor;
 }
@@ -329,12 +368,8 @@ fn build_based_image_data(lzw: u8, mut data: Vec<u8>) -> Vec<u8> {
     based_image_data.append(&mut vec![0]);
     return based_image_data;
 }
-fn build_global_image_data() -> Vec<u8> {
-    let global_image_data: Vec<u8> = vec![
-        0, 0, 0, 128, 0, 0, 0, 128, 0, 128, 128, 0, 0, 0, 128, 128, 0, 128, 0, 128, 128, 192, 192,
-        192, 128, 128, 128, 255, 0, 0, 0, 255, 0, 255, 255, 0, 0, 0, 255, 255, 0, 255, 0, 255, 255,
-        255, 255, 255,
-    ];
+fn build_color_table() -> Vec<u8> {
+    let global_image_data: Vec<u8> = vec![0, 0, 0, 255, 255, 255];
     return global_image_data;
 }
 // 读取文件流
@@ -396,6 +431,17 @@ fn pad_start(str: String) -> String {
     return format!("{:08}", after_pad_start);
 }
 
+fn log2(i: u8) -> u8 {
+    let mut times = 0u32;
+    loop {
+        if i == 2u8.pow(times) {
+            break;
+        }
+        times = times + 1;
+    }
+    return times as u8;
+}
+
 fn lzw_decode(_data: &Vec<u8>, size: u8) -> Vec<u8> {
     let mut data = _data.clone();
     let mut decoder = Decoder::new(LsbReader::new(), size);
@@ -405,6 +451,7 @@ fn lzw_decode(_data: &Vec<u8>, size: u8) -> Vec<u8> {
         data = data[start..].to_vec();
         res.extend(bytes.iter().map(|&i| i));
     }
+    println!("{:?}", res);
     return res;
 }
 
