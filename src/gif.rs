@@ -228,6 +228,7 @@ impl Gif {
 pub fn new(url: &str) {
     let data_buffer: Vec<u8> = get_image_buffer(url).unwrap();
     // println!("{:?}", data_buffer);
+    dbg!(&data_buffer);
     let mut gif = Gif::new(data_buffer);
     gif.analysis();
     let _aaa = create_gif(10, 10);
@@ -240,7 +241,7 @@ fn create_gif(w: u16, h: u16) -> Result<()> {
     let mut data = HEADER.to_vec();
     let mut logical_screen_descriptor = build_logical_screen_descriptor(w, h, true);
     let mut global_color_table = build_color_table();
-    let mut graphic_control_extension = build_graphic_control_extension(64);
+    let mut graphic_control_extension = build_graphic_control_extension(1000);
     let mut image_descriptor = build_image_descriptor(w, h, false);
     // let mut local_color_table = build_color_table();
 
@@ -260,11 +261,11 @@ fn create_gif(w: u16, h: u16) -> Result<()> {
         4,
         lzw_encode(
             &vec![
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 , 0, 0, 0, 0, 0, 0,0 , 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0 , 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,0 , 0, 0, 0, 0, 0, 0, 0,
-           ],
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            ],
             4,
         ),
     );
@@ -451,7 +452,6 @@ fn lzw_decode(_data: &Vec<u8>, size: u8) -> Vec<u8> {
         data = data[start..].to_vec();
         res.extend(bytes.iter().map(|&i| i));
     }
-    println!("{:?}", res);
     return res;
 }
 
@@ -462,6 +462,5 @@ fn lzw_encode(_data: &Vec<u8>, size: u8) -> Vec<u8> {
         let mut enc = Encoder::new(LsbWriter::new(&mut res), size).unwrap();
         enc.encode_bytes(&data).unwrap();
     }
-    println!("{:?}", res);
     return res;
 }

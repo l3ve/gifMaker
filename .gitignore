@@ -4,3 +4,4 @@ dist/
 gif_maker_bg.wasm
 gif_maker.js
 gif_maker.d.ts
+.DS_Store

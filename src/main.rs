@@ -1,27 +1,26 @@
-mod gif;
+// mod gif;
+mod png;
+
 fn main() {
-  gif::new("./images/gif.gif")
+  // let _png = png::Img::new("./images/1.png");
+  // let color = png::Img::get_color_data(&_png);
+  // let color = spread(color);
+  // println!("{:?}", color);
+  println!("{}", decimal_to_binary(10))
 }
 
-// #[cfg(test)]
-// #[test]
-// fn round_trip() {
-//   use lzw::{Decoder, Encoder, LsbReader, LsbWriter};
-//   let size = 8;
-//   let data = b"TOBEORNOTTOBEORTOBEORNOT";
-//   let mut compressed = vec![];
-//   {
-//     let mut enc = Encoder::new(LsbWriter::new(&mut compressed), size).unwrap();
-//     enc.encode_bytes(data).unwrap();
+
+// 转换 十进制 为 二进制
+fn decimal_to_binary(target: u8) -> u8 {
+  return u8::from_str_radix(&format!("{:b}", target), 2).unwrap();
+}
+
+
+// fn spread( mut v:Vec<Vec<u8>>)->Vec<u8> {
+//   let mut _v = vec![];
+//   for ele in v.iter_mut() {
+//     ele.pop();
+//     _v.append(ele)
 //   }
-//   println!("{:?}", compressed);
-//   let mut dec = Decoder::new(LsbReader::new(), size);
-//   let mut compressed = &compressed[..];
-//   let mut data2 = vec![];
-//   while compressed.len() > 0 {
-//     let (start, bytes) = dec.decode_bytes(&compressed).unwrap();
-//     compressed = &compressed[start..];
-//     data2.extend(bytes.iter().map(|&i| i));
-//   }
-//   assert_eq!(data2, data)
+//   return _v
 // }

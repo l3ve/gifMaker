@@ -4,7 +4,7 @@
   "main": "main.js",
   "scripts": {
     "app": "electron .",
-    "serve": "webpack-dev-server",
+    "server": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.js",
     "build": "webpack --watch",
     "wasm": "cargo build --target wasm32-unknown-unknown",
     "bindgen": "wasm-bindgen target/wasm32-unknown-unknown/debug/gif_maker.wasm --out-dir ."
@@ -12,8 +12,8 @@
   "devDependencies": {
     "electron": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "webpack": "^4.0.1",
-    "webpack-cli": "^3.1.1",
-    "webpack-dev-server": "^3.1.0"
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
   }
 }
