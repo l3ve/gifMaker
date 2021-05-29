@@ -1,22 +1,18 @@
 # 此仓库已废弃，图片转换功能转移到其他仓库
 
-[swiTchP](https://github.com/l3ve/swiTchP)
+### [swiTchP](https://github.com/l3ve/swiTchP)
 
-```cmd
+``` javascript  
+/*
   // 压缩wasm的大小
   wasm-gc main.wasm gc-mian.wasm
-```
 
-
-```cmd
 
 cargo new wams-rust --lib
 
 cargo build --target wasm32-unknown-unknown
 
 wasm-bindgen target/wasm32-unknown-unknown/debug/xxxx.wasm --out-dir .
-
-```
 
 
 # electron 衍生
@@ -51,3 +47,5 @@ PS:
  2. 因为性能有限,当图片大于`320*175`,且时间长于`10s`时,转换将会非常慢,但不影响功能,只需耐心等待
  3. 生成图片后,直接拖拽到桌面即可保存
  4. 如果有什么好的意见提议或者BUG的话,小弟我乐意聆听
+  */
+```
