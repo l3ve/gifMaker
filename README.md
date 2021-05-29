@@ -1,3 +1,6 @@
+# 此仓库已废弃，图片转换功能转移到其他仓库
+
+[swiTchP](https://github.com/l3ve/swiTchP)
 
 ```cmd
   // 压缩wasm的大小
